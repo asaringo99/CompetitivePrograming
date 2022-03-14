@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std ;
+typedef long long ll ;
+typedef long double ld ;
+typedef pair<int,int> P ;
+typedef tuple<int,int,int> TP ;
+#define rep(i,n) for(int i = 0 ; i < n ; i++)
+#define rrep(i,a,b) for(int i = a ; i < b ; i++)
+#define endl "\n"
+
+int a , b ;
+
+int main(){
+    cin >> a >> b ;
+    if((b - 1) % (a - 1) != 0) cout << (b - 1) / (a - 1) + 1 << endl ;
+    else cout << (b - 1) / (a - 1) << endl ;
+}

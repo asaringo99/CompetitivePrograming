@@ -14,10 +14,8 @@ typedef tuple<ll,ll,ll> TP ;
 #define endl "\n"
 
 int n ;
-ll A[303] ;
 
 int main(){
     cin >> n ;
-    rep(i,n) cin >> A[i] ;
-    
+
 }

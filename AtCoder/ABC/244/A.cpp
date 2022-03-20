@@ -13,9 +13,11 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int k ;
+
+string n ;
 
 int main(){
-    cin >> n ;
-
+    cin >> k >> n ;
+    cout << n[n.size()-1] << endl ;
 }

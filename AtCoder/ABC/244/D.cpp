@@ -13,26 +13,19 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 998244353 ;
-
 int n ;
-P A[5050] ;
-ll dp[5050][5050] ;
+set<int> st ;
 
 int main(){
     cin >> n ;
-    rep(i,n) cin >> A[i].first ;
-    rep(i,n) cin >> A[i].second ;
-    sort(A,A+n) ;
-    ll res = 0 ;
-    dp[0][0] = 1 ;
-    rep(i,n){
-        auto [a,b] = A[i] ;
-        rep(j,5001){
-            (dp[i+1][j] += dp[i][j])%= mod ;
-            if(j + b <= 5000) (dp[i+1][j+b] += dp[i][j]) %= mod ;
-            if(j + b <= a) (res += dp[i+1][j+b]) %= mod ;
-        }
+    rrep(i,1,2*n+2) st.insert(i) ;
+    while(!st.empty()){
+        auto it = st.begin() ;
+        cout << *it << endl ;
+        st.erase(it) ;
+        int a ;
+        cin >> a ;
+        if(a == 0) break ;
+        st.erase(a) ;
     }
-    cout << res << endl ;
 }

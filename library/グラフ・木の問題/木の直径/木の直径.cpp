@@ -71,6 +71,7 @@ struct TreeDiameter{
         }
     
     public :
+        // コンストラクタ
         TreeDiameter(int n_): n(n_) { init() ; }
         // 木の直径を取得
         int get_diameter() {return diameter ; }

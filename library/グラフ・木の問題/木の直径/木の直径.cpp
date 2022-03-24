@@ -74,6 +74,6 @@ struct TreeDiameter{
         TreeDiameter(int n_): n(n_) { init() ; }
         // 木の直径を取得
         int get_diameter() {return diameter ; }
-        // 木の直径を生成する共通祖先のノードを取得
+        // 木の直径を生成する共通祖先のノードを取得(木の中心を取得)
         int get_lca(){ return lca ; }
 };

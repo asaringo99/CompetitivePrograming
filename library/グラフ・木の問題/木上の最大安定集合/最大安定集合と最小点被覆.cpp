@@ -153,3 +153,5 @@ struct TreeClique{
         // ノード v が消去された時における最小点被覆を取得
         int get_minimum_cover_when_delete_node(int v) { return each_cover[v] ; }
 };
+
+// ABC223G問題を参照

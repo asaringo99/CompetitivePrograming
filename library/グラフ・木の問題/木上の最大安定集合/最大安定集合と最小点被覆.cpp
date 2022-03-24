@@ -25,9 +25,8 @@ struct TreeClique{
         vector<int> color ; // ノードの色分け(最大安定集合にするための色分け)
         vector<int> sumcolor ;
 
-        vector<int> clique2 ;
-        vector<int> color2 ;
-        vector<int> child2 ;
+        vector<int> color2 ; // 全方位木dpの際に色を塗り直す
+        vector<int> clique2 ; // 全方位木dpの際に得られる新たな部分集合についての最大安定集合
 
         vector<int> each_clique ; // 任意のノードが消去されたときの木に対する最大安定集合の値
         vector<int> each_cover ; // 任意のノードが消去されたときの木に対する最小点被覆の値
@@ -39,7 +38,7 @@ struct TreeClique{
             rec(0,-1) ;
         }
     
-        void all_add_edge_(int n_ , bool indexed_0 = true){
+        void all_add_edge_(int n_ , bool indexed_0){
             for(int i = 0 ; i < n_ ; i++){
                 int v , u ;
                 cin >> v >> u ;
@@ -139,7 +138,7 @@ struct TreeClique{
 
         // u と v のエッジを張る
         void add_edge(int u , int v) { add_edge_(u,v) ; }
-        void all_add_edge(int n_) { all_add_edge_(n_) ; }
+        void all_add_edge(int n_ , bool indexed_0 = true) { all_add_edge_(n_ , indexed_0) ; }
 
         // 木における最大安定集合を取得
         int get_maximum_clique() { return maximum_clique ; }

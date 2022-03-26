@@ -28,7 +28,7 @@ struct SCC{
         // go      : v -> u に行ったことがあるか
         // restore : 新たなノードに集約された元々のノード一覧
 
-        vector<vector<int>> G , F ;
+        vector<vector<int>> G , F , H ;
         vector<int> order ;
         vector<bool> used , reused ;
         vector<int> conv ;
@@ -88,7 +88,6 @@ struct SCC{
         }
 
     public :
-        vector<vector<int>> H ;
         // n_ : グラフのノード数
         SCC(int n_){
             n = n_ ;
@@ -112,18 +111,23 @@ struct SCC{
 // function                    : return              : description
 // -----------------------------------------------------------------
 // build()                     : void                : ビルドを行う
-// add_edge(u,v)               : void                : 有向辺 G と逆辺 F を張る
-// convert(u)                  : int                 : 元のノード u がどの新たなグラフでいうどのノードに変異したか
-// get_integrated_node_size(u) : int                 : 新たなグラフのノード (0-indexed) には,前のグラフの幾つ分のノードの個数が集約されているか
-// get_integrated_node(u)      : vector<int>         : 新たなグラフのノード u に集約された前のグラフのノードリスト
-// get_integrated_node()       : vector<vector<int>> : 新たなグラフに集約されたノードリスト
-// get_new_gragh_size()        : int                 : 新しく作られたグラフのノード数, 新しいグラフのノード番号は 0-indexed {0,1,2,3,4,..,gragh_size-1}
-// get_new_gragh()             : vector<vector<int>> : 新しく作られたグラフ
-// *注意* SCCにより生成された新たなグラフは 0-indexedのグラフである
+// add_edge(u,v)               : void                : 有向辺グラフ G と逆辺グラフ F を張る
+// convert(u)                  : int                 : 元のグラフ G のノード u が新たなグラフ H におけるどのノードに変異したか
+// get_integrated_node_size(u) : int                 : 新たなグラフ H のノード (0-indexed) に元のグラフ G の幾つ分のノードが集約されているか
+// get_integrated_node(u)      : vector<int>         : 新たなグラフ H のノード u に集約された元のグラフ G のノードリスト
+// get_integrated_node()       : vector<vector<int>> : 新たなグラフ H に集約されたノードリスト
+// get_new_gragh_size()        : int                 : 新たなグラフ H のノード数, 新しいグラフのノード番号は 0-indexed {0,1,2,3,4,..,gragh_size-1}
+// get_new_gragh()             : vector<vector<int>> : 新たなグラフ H
+// ------------------------------------------------------------------
+// *注意* SCCにより生成された新たなグラフ H は 0-indexedのグラフである
 // このままコピペ奨励
 
+// -------------------------------------------- //
+// 不安であれば ABC245F sample1, 典型90 021 で確認  //
+// -------------------------------------------- //
+
 int n , m ;
-vector<vector<int>> G ;
+vector<vector<int>> G ; // 新たなグラフ
 
 int main(){
     cin >> n >> m ;

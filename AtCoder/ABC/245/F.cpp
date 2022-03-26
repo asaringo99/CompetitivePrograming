@@ -28,7 +28,7 @@ struct SCC{
         // go      : v -> u に行ったことがあるか
         // restore : 新たなノードに集約された元々のノード一覧
 
-        vector<vector<int>> G , F ;
+        vector<vector<int>> G , F , H ;
         vector<int> order ;
         vector<bool> used , reused ;
         vector<int> conv ;
@@ -36,7 +36,7 @@ struct SCC{
         vector<vector<int>> restore ;
         map<P,bool> go ;
 
-        inline void dfs(int v){
+        void dfs(int v){
             used[v] = true ;
             for(int i = 0 ; i < G[v].size() ; i++){
                 int u = G[v][i] ;
@@ -46,7 +46,7 @@ struct SCC{
             order.push_back(v) ;
         }
 
-        inline void Redfs(int s , int v){
+        void Redfs(int s , int v){
             reused[v] = true ;
             conv[v] = s ;
             volume[s]++ ;
@@ -88,7 +88,6 @@ struct SCC{
         }
 
     public :
-        vector<vector<int>> H ;
         // n_ : グラフのノード数
         SCC(int n_){
             n = n_ ;
@@ -109,9 +108,11 @@ struct SCC{
         vector<vector<int>> get_new_gragh() { return H ; }
 } ;
 
+// function                    : return              : description
+// -----------------------------------------------------------------
 // build()                     : void                : ビルドを行う
 // add_edge(u,v)               : void                : 有向辺 G と逆辺 F を張る
-// convert(u)                  : int                 : 元のノード u がどの新たなグラフでいうどのノードに変異したか
+// convert(u)                  : int                 : 元のノード u が新たなグラフでいうどのノードに変異したか
 // get_integrated_node_size(u) : int                 : 新たなグラフのノード (0-indexed) には,前のグラフの幾つ分のノードの個数が集約されているか
 // get_integrated_node(u)      : vector<int>         : 新たなグラフのノード u に集約された前のグラフのノードリスト
 // get_integrated_node()       : vector<vector<int>> : 新たなグラフに集約されたノードリスト

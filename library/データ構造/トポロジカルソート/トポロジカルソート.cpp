@@ -103,6 +103,10 @@ struct TopologicalSort{
 // get_gragh()      : vector<vector<int>> : グラフ G を返す
 // *注意* 取り敢えず全てをコピペすることを奨励
 
+// ---------------------------------- //
+// 不安であれば ABC216D, ABC223D で確認  //
+// ---------------------------------- //
+
 int n , m ;
 vector<vector<int>> G ;
 vector<int> ordered ;

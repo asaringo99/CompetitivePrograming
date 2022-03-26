@@ -16,25 +16,27 @@ typedef tuple<ll,ll,ll> TP ;
 struct SCC{
     private :
         int n ;
-        int new_node ;
+        int gragh_size ;
 
         // G       : 既存の有向辺についての情報
         // F       : 既存の有向辺（逆辺）についての情報
         // H       : 新たなグラフ（有向辺）の辺についての情報
         // used    : dfsで使ったか
         // reused  : Redfsで使ったか
-        // convert : 新たなノードに変換する
+        // conv    : 新たなノードに変換する
         // volume  : 新たなノードに集約されたノード個数
         // go      : v -> u に行ったことがあるか
+        // restore : 新たなノードに集約された元々のノード一覧
 
         vector<vector<int>> G , F ;
         vector<int> order ;
         vector<bool> used , reused ;
-        vector<int> convert ;
+        vector<int> conv ;
         vector<int> volume ;
+        vector<vector<int>> restore ;
         map<P,bool> go ;
 
-        void dfs(int v){
+        inline void dfs(int v){
             used[v] = true ;
             for(int i = 0 ; i < G[v].size() ; i++){
                 int u = G[v][i] ;
@@ -44,9 +46,9 @@ struct SCC{
             order.push_back(v) ;
         }
 
-        void Redfs(int s , int v){
+        inline void Redfs(int s , int v){
             reused[v] = true ;
-            convert[v] = s ;
+            conv[v] = s ;
             volume[s]++ ;
             for(int i = 0 ; i < F[v].size() ; i++){
                 int u = F[v][i] ;
@@ -62,14 +64,16 @@ struct SCC{
             for(int i = 0 ; i < n ; i++) {
                 int v = order[n-1-i] ;
                 if(reused[v]) continue ;
-                Redfs(new_node,v) ;
-                new_node++ ;
+                Redfs(gragh_size,v) ;
+                gragh_size++ ;
             }
-            H.resize(new_node) ;
+            H.resize(gragh_size) ;
+            restore.resize(gragh_size) ;
             // 処理3 : 新しいグラフを作成する
             for(int v = 0 ; v < n ; v++){
+                restore[conv[v]].push_back(v) ;
                 for(int u : G[v]){
-                    int from = convert[v] , to = convert[u] ;
+                    int from = conv[v] , to = conv[u] ;
                     if(from == to) continue ;
                     if(go[P(from,to)]) continue ;
                     go[P(from,to)] = true ;
@@ -90,31 +94,45 @@ struct SCC{
             n = n_ ;
             G.resize(n) ; F.resize(n) ;
             used.resize(n,false) ; reused.resize(n,false) ;
-            convert.resize(n) ;
+            conv.resize(n) ;
             volume.resize(n) ;
-            new_node = 0 ;
+            gragh_size = 0 ;
         }
         
         void build() { build_() ; }
         void add_edge(int v , int u) { add_edge_(v,u) ; }
-        int convert(int v) {return convert[v] ; } // ノード v は新たなグラフ H 上においてどのノードに変化するか
-        int get_new_gragh_size(){ return new_node ; }
+        int convert(int v) { return conv[v] ; } // ノード v は新たなグラフ H 上においてどのノードに変化するか
         int get_integrated_node_size(int v){ return volume[v] ; }
+        vector<vector<int>> get_integrated_node() { return restore ; }
+        vector<int> get_integrated_node(int v) { return restore[v] ; }
+        int get_new_gragh_size(){ return gragh_size ; }
         vector<vector<int>> get_new_gragh() { return H ; }
-
-        inline vector<int>& operator [] (int v) { return H[v] ; } 
 } ;
 
-// build()                     : ビルドを行う
-// add_edge(u,v)               : 有向辺 G と逆辺 F を張る
-// convert(u)                  : 元のノード u がどの新たなグラフでいうどのノードに変異したか
-// get_new_gragh_size()        : 新しく作られたグラフのノード数, 新しいグラフのノード番号は 0-indexed {0,1,2,3,4,..,new_node-1}
-// get_integrated_node_size(u) : 新たなグラフのノード (0-indexed) には,前のグラフの幾つ分のノードの個数が集約されているか
-// get_new_gragh()             : 新しく作られたグラフ
+// build()                     : void                : ビルドを行う
+// add_edge(u,v)               : void                : 有向辺 G と逆辺 F を張る
+// convert(u)                  : int                 : 元のノード u がどの新たなグラフでいうどのノードに変異したか
+// get_integrated_node_size(u) : int                 : 新たなグラフのノード (0-indexed) には,前のグラフの幾つ分のノードの個数が集約されているか
+// get_integrated_node(u)      : vector<int>         : 新たなグラフのノード u に集約された前のグラフのノードリスト
+// get_integrated_node()       : vector<vector<int>> : 新たなグラフに集約されたノードリスト
+// get_new_gragh_size()        : int                 : 新しく作られたグラフのノード数, 新しいグラフのノード番号は 0-indexed {0,1,2,3,4,..,gragh_size-1}
+// get_new_gragh()             : vector<vector<int>> : 新しく作られたグラフ
 // *注意* SCCにより生成された新たなグラフは 0-indexedのグラフである
 // このままコピペ奨励
 
 int n , m ;
+
+bool ok[202020] , used[202020] ;
+vector<vector<int>> G ;
+
+void dfs(int v){
+    used[v] = true ;
+    for(int i = 0 ; i < G[v].size() ; i++){
+        int u = G[v][i] ;
+        if(!used[u]) dfs(u) ;
+        if(ok[u]) ok[v] = true ;
+    }
+}
 
 int main(){
     cin >> n >> m ;
@@ -127,7 +145,21 @@ int main(){
     }
     scc.build() ;
     // SCC後のグラフ ( 0-indexed )
-    vector<vector<int>> G = scc.get_new_gragh() ;
+    G = scc.get_new_gragh() ;
     // SCC後に得られたグラフのノード数
-    int new_node_num = scc.get_new_gragh_size() ;
+    int n_ = scc.get_new_gragh_size() ;
+
+    rep(i,n_){
+        if(scc.get_integrated_node_size(i) > 1) ok[i] = true ;
+    }
+    rep(i,n_){
+        if(used[i]) continue;
+        dfs(i) ;
+    }
+    int res = 0 ;
+    rep(i,n_){
+        if(scc.get_integrated_node_size(i) > 1) res += scc.get_integrated_node_size(i) ;
+        else if(ok[i]) res++ ;
+    }
+    cout << res << endl ;
 }

@@ -88,6 +88,8 @@ struct LCA{
         vector<vector<int>> get_gragh() { return G ; }
 };
 
+// function                  : return              : description
+// -----------------------------------------------------
 // build()                   : void                : ビルドする (辺を張った後にビルドすることに注意)
 // add_edge(u,v)             : void                : u -> v, v -> u に辺を張る
 // get_lca(u,v)              : int                 : u と v の LCA を求める

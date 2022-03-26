@@ -109,6 +109,8 @@ struct SCC{
         vector<vector<int>> get_new_gragh() { return H ; }
 } ;
 
+// function                    : return              : description
+// -----------------------------------------------------------------
 // build()                     : void                : ビルドを行う
 // add_edge(u,v)               : void                : 有向辺 G と逆辺 F を張る
 // convert(u)                  : int                 : 元のノード u がどの新たなグラフでいうどのノードに変異したか

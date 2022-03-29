@@ -19,7 +19,6 @@ struct Eratosthenes{
     vector<int> factor ;
 
     Eratosthenes(int n_ , bool extend = true){
-        cout << extend << endl ;
         n = n_ ;
         if(extend) n = max(n,303030) ;
         prime.resize(n,true) ;
@@ -37,6 +36,7 @@ struct Eratosthenes{
 
     bool isPrime(int k) { return prime[k] ; }
     size_t size() { return factor.size() ; }
+    vector<int> get_factor() { return factor ; }
     inline int operator [] (int i) { return factor[i] ; }
 };
 

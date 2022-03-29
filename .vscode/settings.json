@@ -2,6 +2,17 @@
     "files.associations": {
         "iostream": "cpp",
         "iomanip": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "deque": "cpp",
+        "functional": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "*.tcc": "cpp",
+        "iosfwd": "cpp"
     }
 }

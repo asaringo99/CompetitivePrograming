@@ -9,12 +9,12 @@ typedef tuple<ll,ll,ll> TP ;
 #define bit_count(x) __builtin_popcountll(x)
 #define gcd(a,b) __gcd(a,b)
 #define lcm(a,b) a / gcd(a,b) * b
-#define rep(i,n) for(int i = 0 ; i < n ; i++)
-#define rrep(i,a,b) for(int i = a ; i < b ; i++)
+#define rep(i,n) for(ll i = 0 ; i < n ; i++)
+#define rrep(i,a,b) for(ll i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 998244353 ;
-const int MAX_N = 505050 ;
+const ll mod = 998244353 ;
+const ll MAX_N = 505050 ;
 
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
 ll fac[MAX_N+1] ; // (n!) (mod p) を格納
@@ -57,26 +57,29 @@ ll permutation(ll n , ll r){
 
 void init(){ f() ; g() ; }
 
-int n , x ;
+ll n , x ;
 
-ll dp[55][55][55] ;
+unordered_map<ll,ll> dp[55][55] ;
 
 int main(){
     init() ;
     cin >> n >> x ;
-    rrep(i,1,n+1) {
-        dp[i][i][1] = combination(n,i) * permutation(i-1,i-1) % mod ;
-        rrep(j,1,n+1) rrep(k,1,n+1){
-            rrep(a,1,n){
-                if(i + a > n) break ;
-                (dp[i+a][max(a,j)][k+1] += dp[i][j][k] * combination(n-i,a) % mod * permutation(a-1,a-1) % mod) %= mod ;
-            }
+
+    dp[0][0][1] = 1 ;
+    rep(i,n+1) rep(j,n+1) for(auto it : dp[i][j]){
+        ll l = it.first ;
+        ll d = it.second ;
+        rrep(k,1,n+1){
+            if(n-j >= k) (dp[i+1][j+k][lcm(l,k)] += dp[i][j][l] * combination(n-j,k) % mod * permutation(k-1,k-1) % mod) %= mod ;
         }
     }
     ll res = 0 ;
-    rrep(i,1,n+1) rrep(j,1,n+1) {
-        ll val = dp[n][i][j] * powmod(permutation(j,j),mod-2) % mod ;
-        (res += powmod(i,x) * val % mod) %= mod ;
+    rrep(i,1,n+1){
+        for(auto it : dp[i][n]){
+            ll l = it.first ;
+            ll d = it.second ;
+            (res += powmod(l,x) * d % mod * powmod(permutation(i,i),mod-2)) %= mod ;
+        }
     }
     cout << res << endl ;
 }

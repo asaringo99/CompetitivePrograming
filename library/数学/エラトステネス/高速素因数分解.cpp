@@ -13,11 +13,11 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-struct Eratosthenes{
+struct FastPrimeFactorization{
     int n ;
     vector<int> factor ;
 
-    Eratosthenes(int n_){
+    FastPrimeFactorization(int n_){
         n = max(n_,303030) ;
         factor.resize(n,-1) ;
         build() ;
@@ -64,6 +64,6 @@ struct Eratosthenes{
 int main(){
     int n , k;
     cin >> n >> k ;
-    Eratosthenes A(n) ;
+    FastPrimeFactorization A(n) ;
     for(int p : A.primeFactor(k)) cout << p << endl ;
 }

@@ -13,6 +13,7 @@
         "unordered_set": "cpp",
         "vector": "cpp",
         "*.tcc": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "valarray": "cpp"
     }
 }

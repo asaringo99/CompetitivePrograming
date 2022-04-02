@@ -13,11 +13,28 @@ typedef tuple<ll,ll,ll> TP ;
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
-
 int n ;
+
+P X[3] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    rep(i,3) cin >> X[i].first >> X[i].second ;
+    sort(X,X+3) ;
+    if(X[0].first == X[1].first){
+        if(X[0].second == X[2].second){
+            cout << X[2].first << " " << X[1].second << endl;
+        }
+        else{
+            cout << X[2].first << " " << X[0].second << endl;
+        }
+    }
+    else{
+        if(X[0].second == X[1].second){
+            cout << X[2].first << " " << X[1].second << endl;
+        }
+        else{
+            cout << X[2].first << " " << X[0].second << endl;
+        }
+    }
 }

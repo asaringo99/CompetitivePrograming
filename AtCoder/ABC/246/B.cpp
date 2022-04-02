@@ -14,10 +14,11 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+ld a , b ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> a >> b ;
+    ld d = sqrt(a*a+b*b) ;
+    cout << fixed << setprecision(25) << a / d << " " << b / d << endl ;
 }

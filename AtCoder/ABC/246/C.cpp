@@ -14,10 +14,32 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+ll n , k , x ;
+ll A[202020] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> k >> x ;
+    ll res = 0 ;
+    rep(i,n) cin >> A[i] , res += A[i] ;
+    sort(A,A+n,greater<ll>()) ;
+    ll sum = 0 ;
+    rep(i,n){
+        ll c = A[i] / x ;
+        if(c > k) {
+            sum += x * k ;
+            cout << res - sum << endl ;
+            return 0 ;
+        }
+        sum += x * c ;
+        A[i] -= c * x ;
+        k -= c ;
+    }
+    sort(A,A+n,greater<ll>()) ;
+    rep(i,n){
+        if(k == 0) break ;
+        sum += A[i] ;
+        k-- ;
+    }
+    cout << res - sum << endl ;
 }

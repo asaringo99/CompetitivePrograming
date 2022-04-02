@@ -21,8 +21,6 @@ typedef tuple<ll,ll,ll> TP ;
 //      }                                                                                    //
 // ----------------------------------------------------------------------------------------- //
 
-int n ;
-
 template<typename T>
 struct SegmentTree2D{
     private :

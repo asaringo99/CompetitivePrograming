@@ -7,17 +7,18 @@ typedef pair<ll,ll> P ;
 
 int n ;
 
-const int MAX_N = 1 << 19 ;
-
 template<typename T>
 struct LazySegmentTree{
-    T data[2 * MAX_N - 1] , lazy[2 * MAX_N - 1] ;
+    const ll linf = 1e18 ;
+    const int inf = 1e8 ;
+
     int n ;
+    vector<T> dat , lazy ;
     LazySegmentTree(int n_){
         n = 1 ;
         while(n < n_) n *= 2 ;
-        memset(data,0,sizeof(data)) ;
-        memset(lazy,0,sizeof(lazy)) ;
+        dat.resize(2*n-1,0) ;
+        lazy.resize(2*n-1,0) ;
     }
 
     // 遅延評価
@@ -52,7 +53,7 @@ struct LazySegmentTree{
     T sub_query(int a , int b , int k , int l , int r){
         //遅延評価（これは確実に必要）
         eval(k) ;
-        if(b <= l || r <= a) return 1e9 ;
+        if(b <= l || r <= a) return inf ;
         if(a <= l && r <= b) return data[k] ;
         T lef = sub_query(a,b,2*k+1,l,(l+r)/2) ;
         T rig = sub_query(a,b,2*k+2,(l+r)/2,r) ;

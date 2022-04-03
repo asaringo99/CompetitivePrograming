@@ -7,27 +7,28 @@ typedef pair<ll,ll> P ;
 
 int n ;
 
-const int MAX_N = 1 << 19 ;
-const int INF = INT_MAX ;
 
 template <typename T>
 struct LazySegTree{
-    T data[2 * MAX_N - 1] , lazy[2 * MAX_N - 1] ;
+    const ll linf = 1e18 ;
+    const int inf = 1e8 ;
+
+    vector<T> dat , lazy ;
     int n ;
     LazySegTree(int n_){
         n = 1 ;
         while(n < n_) n *= 2 ;
-        fill(dat,dat+MAX_N,INF) ;
-        fill(lazy,lazy+MAX_N,INF) ;
+        dat.resize(2*n-1,0) ;
+        lazy.resize(2*n-1,inf) ;
     }
     void eval(int k){
-        if(lazy[k] == INF) return ;
+        if(lazy[k] == inf) return ;
         if(k < n - 1){
             lazy[2*k+1] = lazy[k] ;
             lazy[2*k+2] = lazy[k] ;
         }
         dat[k] = lazy[k] ;
-        lazy[k] = INF ;
+        lazy[k] = inf ;
     }
 
     void sub_updata(int a , int b , int k , int l , int r , T x){
@@ -49,7 +50,7 @@ struct LazySegTree{
 
     T sub_query(int a , int b , int k , int l , int r){
         eval(k) ;
-        if(r <= a || b <= l) return INF ;
+        if(r <= a || b <= l) return inf ;
         if(a <= l && r <= b) return dat[k] ;
         T lef = sub_query(a,b,2*k+1,l,(l+r)/2) ;
         T rig = sub_query(a,b,2*k+2,(l+r)/2,r) ;

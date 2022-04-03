@@ -27,7 +27,7 @@ struct LazySegmentTree{
         M em ;
         vector<S> dat ;
         vector<M> lazy ;
-        
+
         // 各セグメントに左端値, 右端値を持たせる
         void build(){
             int id = 0 ;
@@ -39,22 +39,21 @@ struct LazySegmentTree{
                 }
             }
         }
-        void eval(int k , int l , int r){
+        void eval(int k){
             if(lazy[k] == em) return ;
-            int len = (r - l) / 2 ;
             if(k < n - 1) {
-                lazy[2 * k + 1] = fm(lazy[2 * k + 1] , {lazy[k].a,lazy[k].b}) ;
-                lazy[2 * k + 2] = fm(lazy[2 * k + 2] , {lazy[k].a,lazy[k].a*len+lazy[k].b}) ;
+                lazy[2 * k + 1] = fm(lazy[2 * k + 1] , lazy[k]) ;
+                lazy[2 * k + 2] = fm(lazy[2 * k + 2] , lazy[k]) ;
             }
             dat[k] = fa(dat[k],lazy[k]) ;
             lazy[k] = em ;
         }
         void apply(int a , int b , int k , int l , int r , M x){
-            eval(k,l,r) ;
+            eval(k) ;
             if(r <= a || b <= l) return ;
             if(a <= l && r <= b) {
-                lazy[k] = fm(lazy[k],{x.a,x.a*(l-a)+x.b}) ;
-                eval(k,l,r) ;
+                lazy[k] = fm(lazy[k],x) ;
+                eval(k) ;
                 return ;
             }
             apply(a,b,2*k+1,l,(l+r)/2,x) ;
@@ -62,7 +61,7 @@ struct LazySegmentTree{
             dat[k] = fs(dat[2*k+1],dat[2*k+2]) ;
         }
         S prod(int a , int b , int k , int l , int r) {
-            eval(k,l,r) ;
+            eval(k) ;
             if(r <= a || b <= l) return es ;
             if(a <= l && r <= b) return dat[k] ;
             S lef = prod(a,b,2*k+1,l,(l+r)/2) ;
@@ -71,12 +70,11 @@ struct LazySegmentTree{
         }
     
     public :
-        LazySegmentTree(int n_ , FS fs_ , S es_ , S ee_ , FM fm_ , M em_ , FA fa_) : fs(fs_) , fm(fm_) , fa(fa_) , es(es_) , em(em_) {
-            _n = n_ ;
+        LazySegmentTree(int n_ , FS fs_ , S es_ , S ee_ , FM fm_ , M em_ , FA fa_) : _n(n_) , fs(fs_) , fm(fm_) , fa(fa_) , es(es_) , em(em_) {
             n = 1 ;
             while(n_ > n) n *= 2 ;
             dat.resize(2 * n - 1,ee_) ;
-            lazy.resize(2 * n - 1,em) ;
+            lazy.resize(2 * n - 1,em_) ;
             build() ;
         }
         void apply(int a , int b , M x) { apply(a,b,0,0,n,x) ; }
@@ -89,7 +87,7 @@ namespace monoid{
 
     // モノイド
     struct S{
-        ll sum ;
+        ll sum , min , max ;
         int lef , rig ;
     };
 
@@ -97,54 +95,69 @@ namespace monoid{
     function<S(S,S)> fs = [](S x , S y) -> S {
         return S{
             x.sum + y.sum,
+            min(x.min,y.min),
+            max(x.max,y.max),
             x.lef,
             y.rig
         };
     };
     
     // Sの単位元
-    S es = {0,inf,-inf} ;
+    S es = {0,linf,-linf,inf,-inf} ;
 
     // Sの初期化単位元
-    S ee = {0,0,0} ;
+    S ee = {0,0,0,inf,-inf} ;
 
     // 作用モノイド
     struct M{
         ll a , b ;
-        bool operator == (M x) { return a == x.a && b == x.b ; }
+        int lef ; // 等差数列更新のスタート位置
+        bool operator == (M x) { return a == x.a && b == x.b && lef == x.lef ; }
     };
 
     // M*M->Mにおける演算の定義1
     function<M(M,M)> fm = [](M x , M y) -> M {
-        return M{
-            x.a + y.a,
-            x.b + y.b
-        };
+        return y;
     };
 
     // Mの単位元
-    M em = {0,0} ;
+    M em = {0,0,inf} ;
 
     // S*M->Sにおける演算の定義
     function<S(S,M)> fa = [](S x , M y) -> S {
         int len = (x.rig - x.lef) ;
         int lef = x.lef ;
-        return S{
-            x.sum + len * (len - 1) / 2 * y.a + len * y.b ,
-            x.lef,
-            x.rig,
-        };
+        if(y.a > 0){
+            return S{
+                len * (len - 1) / 2 * y.a + (y.b + (x.lef - y.lef) * y.a) * len ,
+                y.b + (x.lef - y.lef) * y.a,
+                y.b + (x.lef - y.lef) * y.a + (len - 1) * y.a,
+                x.lef,
+                x.rig,
+            };
+        }
+        else{
+            return S{
+                len * (len - 1) / 2 * y.a + (y.b + (x.lef - y.lef) * y.a) * len ,
+                y.b + (x.lef - y.lef) * y.a + (len - 1) * y.a,
+                y.b + (x.lef - y.lef) * y.a,
+                x.lef,
+                x.rig,
+            };
+        }
     };
 };
 using namespace monoid ;
 
 // monoid
-// S    : sum(区間和) , lef(区間左端値), rig(区間右端値) 
-// M    : (a,b) -> ax + b のモノイド
-// apply: 区間等差数列加算
+// S    : sum(区間和) , min , max , lef(区間左端値), rig(区間右端値) 
+// M    : (a, b) -> ax + b
+// apply: 区間更新
 // prod : sum(区間和), min(区間最小値), max(区間最大値)
 
-// verified: https://onlinejudge.u-aizu.ac.jp/beta/room.html#HUPC2020Day1/problems/B
+// ---------------------------------------------------------------//
+// verified : https://mojacoder.app/users/stoq/problems/RArithQe  //
+// ---------------------------------------------------------------//
 
 int n , q ;
 
@@ -152,13 +165,31 @@ int main(){
     cin >> n >> q ;
     LazySegmentTree<S,M> segtree(n,fs,es,ee,fm,em,fa) ;
     rep(i,q){
-        int l , r ;
-        cin >> l >> r ;
-        l-- ;
-        segtree.apply(l,l+r,{1,1}) ;
-    }
-    rep(i,n) {
-        if(i == n - 1) cout << segtree.prod(i,i+1).sum << endl ;
-        else cout << segtree.prod(i,i+1).sum << " " ;
+        int t ;
+        cin >> t ;
+        if(t == 1){
+            int l , r , a , b ;
+            cin >> l >> r >> a >> b ;
+            l-- ;
+            segtree.apply(l,r,{a,b,l}) ;
+        }
+        if(t == 2){
+            int l , r ;
+            cin >> l >> r ;
+            l-- ;
+            cout << segtree.prod(l,r).min << endl ;
+        }
+        if(t == 3){
+            int l , r ;
+            cin >> l >> r ;
+            l-- ;
+            cout << segtree.prod(l,r).max << endl ;
+        }
+        if(t == 4){
+            int l , r ;
+            cin >> l >> r ;
+            l-- ;
+            cout << segtree.prod(l,r).sum << endl ;
+        }
     }
 }

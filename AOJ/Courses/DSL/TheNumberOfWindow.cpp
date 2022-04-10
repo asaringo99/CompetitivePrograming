@@ -14,10 +14,21 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , q ;
+ll S[101010] , A[101010] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> q ;
+    rep(i,n) cin >> A[i] , S[i+1] = S[i] + A[i] ;
+    rep(z,q){
+        ll x , res = 0 ;
+        cin >> x ;
+        rep(i,n){
+            auto it = upper_bound(S,S+n+1,S[i]+x) ; it-- ;
+            int id = it - S ;
+            res += id - i ;
+        }
+        cout << res << endl ;
+    }
 }

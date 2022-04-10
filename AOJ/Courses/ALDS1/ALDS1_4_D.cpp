@@ -14,10 +14,31 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , k ;
+ll w[101010] ;
+
+bool f(ll x){
+    ll sum = 0 , cnt = 1 ;
+    rep(i,n){
+        if(w[i] > x) return false ;
+        if(sum + w[i] > x) {
+            sum = w[i] ;
+            cnt++ ;
+        }
+        else sum += w[i] ;
+    }
+    return cnt <= k ;
+}
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> k ;
+    rep(i,n) cin >> w[i] ;
+    ll lef = 0 , rig = 1e16 ;
+    while(rig - lef > 1){
+        ll mid = (lef + rig) / 2 ;
+        if(f(mid)) rig = mid ;
+        else lef = mid ;
+    }
+    cout << rig << endl ;
 }

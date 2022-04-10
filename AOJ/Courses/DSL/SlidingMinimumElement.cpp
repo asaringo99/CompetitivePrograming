@@ -14,10 +14,22 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , L ;
+int A[1010101] ;
+multiset<int> st ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> L ;
+    rep(i,n) cin >> A[i] ;
+    int lef = 0 , rig = 0 ;
+    rep(i,L) st.insert(A[i]) ;
+    for(int i = 0 ; i + L <= n ; i++){
+        auto it = st.begin() ;
+        if(i+L<n) cout << *it << " " ;
+        else cout << *it << endl ;
+        st.erase(st.find(A[i])) ;
+        if(i + L == n) break ;
+        st.insert(A[i+L]) ;
+    }
 }

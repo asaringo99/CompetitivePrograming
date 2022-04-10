@@ -13,10 +13,36 @@ typedef tuple<ll,ll,ll> TP ;
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
-int n ;
+
+const int mod = 998244353 ;
+
+ll powmod(ll x , ll n){
+    ll res = 1 ;
+    while(n > 0){
+        if(n & 1) (res *= x) %= mod ;
+        (x *= x) %= mod ;
+        n >>= 1 ;
+    }
+    return res ;
+}
+
+int n , L ;
+string T[20] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> L ;
+    rep(i,n) cin >> T[i] ;
+    ll res = 0 ;
+    rrep(S,1,1<<n){
+        map<char,int> mp ;
+        int s_size = bit_count(S) ;
+        rep(i,n) if(S >> i & 1) for(char u : T[i]) mp[u]++ ;
+        int cnt = 0 ;
+        for(auto it : mp) if(s_size == it.second) cnt++ ;
+        if(s_size % 2 == 1) res += powmod(cnt,L) ;
+        if(s_size % 2 == 0) res -= powmod(cnt,L) ;
+        (res += mod) %= mod ;
+    }
+    cout << res << endl ;
 }

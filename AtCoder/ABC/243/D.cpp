@@ -14,20 +14,25 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n , L ;
+ll n , x ;
+string S ;
 
 int main(){
     fast_input_output
-    cin >> n >> L ;
-    int res = 1e8 ;
-    int sum = 0 ;
-    int ans = -1 ;
-    rep(i,n) sum += L + i ;
-    rep(i,n) {
-        if(res > abs(sum - (sum-(L+i)))) {
-            res = abs(sum - (sum-(L+i))) ;
-            ans = sum - (L+i) ;
+    cin >> n >> x >> S ;
+    int count = 0 ;
+    rep(i,n){
+        if(count > 0){
+            if(S[i] == 'L' || S[i] == 'R') count++ ;
+            else count-- ;
+            if(count == 0) x /= 2 ;
+        }
+        else{
+            if(S[i] == 'L') x = x * 2 ;
+            if(S[i] == 'R') x = x * 2 + 1 ;
+            if(S[i] == 'U') x = x / 2 ;
+            if(x > 1000000000000000000LL) count++ ;
         }
     }
-    cout << ans << endl ;
+    cout << x << endl ;
 }

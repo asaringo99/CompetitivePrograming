@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -13,20 +14,21 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 998244353 ;
+const int mod = 1000000007 ;
 const int MAX_N = 505050 ;
 
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
 ll fac[MAX_N+1] ; // (n!) (mod p) を格納
 
-ll powmod(ll x , ll n){
+// 繰り返し二乗法
+ll powmod(ll A , ll N){
     ll res = 1 ;
-    while(n > 0){
-        if(n & 1) (res *= x) %= mod ;
-        (x *= x) %= mod ;
-        n >>= 1 ;
+    while(N > 0){
+        if(N & 1) res = (res * A) % mod ;
+        A = (A * A) % mod ;
+        N >>= 1 ;
     }
-    return res ;
+    return res % mod ;
 }
 
 // 階乗の逆元(n!)^(-1)のmodを配列に格納
@@ -47,7 +49,6 @@ void g(){
 
 //nCrの計算
 ll combination(ll n , ll r){
-    if(r < 0 || n < 0 || n < r) return 0 ;
     return fac[n] * inv[n-r] % mod * inv[r] % mod ;
 }
 
@@ -57,22 +58,29 @@ ll permutation(ll n , ll r){
 
 void init(){ f() ; g() ; }
 
-int n , m , b , w ;
+int n ;
+ll A[2020] ;
+set<int> st ;
 
 int main(){
-    cin >> n >> m >> b >> w ;
+    fast_input_output
     init() ;
-    ll res = 0 ;
-    rrep(x,1,n+1) rrep(y,1,m+1){
-        ll sum = 0 ;
-        rep(xi,x+1) rep(yi,y+1){
-            if((xi+yi)%2==0) sum += combination(x,xi) * combination(y,yi) % mod * combination((x-xi)*(y-yi),b) % mod ;
-            if((xi+yi)%2==1) sum -= combination(x,xi) * combination(y,yi) % mod * combination((x-xi)*(y-yi),b) % mod ;
-            (sum += mod) %= mod ;
-        }
-        (sum *= combination(n,x) * combination(m,y) % mod) %= mod ;
-        (sum *= combination((n-x)*(m-y),w)) %= mod ;
-        (res += sum) %= mod ;
+    cin >> n ;
+    ll cnt = 0 , emp = 0 ;
+    rep(i,n) {
+        cin >> A[i] ;
+        if(A[i] == -1) emp++ ;
+        else st.insert(A[i]) ;
     }
+    rep(i,n) if(A[i] == -1){
+        if(st.count(i+1) == 0) cnt++ ;
+    }
+    ll sum = 0 ;
+    rrep(i,1,cnt+1){
+        if(i % 2 == 1) sum += combination(cnt,i) * permutation(emp-i,emp-i) % mod ;
+        if(i % 2 == 0) sum -= combination(cnt,i) * permutation(emp-i,emp-i) % mod ;
+        (sum += mod) %= mod ;
+    }
+    ll res = (permutation(emp,emp) - sum + mod) % mod ;
     cout << res << endl ;
 }

@@ -1,6 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
+typedef long double ld ;
+typedef pair<ll,ll> P ;
+typedef tuple<ll,ll,ll> TP ;
+#define chmin(a,b) a = min(a,b)
+#define chmax(a,b) a = max(a,b)
+#define bit_count(x) __builtin_popcountll(x)
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) a / gcd(a,b) * b
+#define rep(i,n) for(int i = 0 ; i < n ; i++)
+#define rrep(i,a,b) for(int i = a ; i < b ; i++)
+#define endl "\n"
 
 const int mod = 1000000007 ;
 const int MAX_N = 505050 ;
@@ -8,7 +20,6 @@ const int MAX_N = 505050 ;
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
 ll fac[MAX_N+1] ; // (n!) (mod p) を格納
 
-// 繰り返し二乗法
 ll powmod(ll x , ll n){
     ll res = 1 ;
     while(n > 0){
@@ -16,7 +27,7 @@ ll powmod(ll x , ll n){
         (x *= x) %= mod ;
         n >>= 1 ;
     }
-    return res % mod ;
+    return res ;
 }
 
 // 階乗の逆元(n!)^(-1)のmodを配列に格納
@@ -46,8 +57,18 @@ ll permutation(ll n , ll r){
 
 void init(){ f() ; g() ; }
 
+ll n , k ;
+
 int main(){
-    // invが逆元の階乗(1/n!)のmod配列
-    // facが階乗(n!)のmod配列
+    fast_input_output
     init() ;
+    cin >> n >> k ;
+    ll sum = 0 ;
+    rrep(i,1,k){
+        if(i % 2 == 1) sum += combination(k,i) * powmod(k-i,n) % mod ;
+        if(i % 2 == 0) sum -= combination(k,i) * powmod(k-i,n) % mod ;
+        (sum += mod) %= mod ;
+    }
+    ll res = (powmod(k,n) - sum + mod) % mod ;
+    cout << res << endl ;
 }

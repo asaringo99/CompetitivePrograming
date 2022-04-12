@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -47,7 +48,6 @@ void g(){
 
 //nCrの計算
 ll combination(ll n , ll r){
-    if(r < 0 || n < 0 || n < r) return 0 ;
     return fac[n] * inv[n-r] % mod * inv[r] % mod ;
 }
 
@@ -57,22 +57,29 @@ ll permutation(ll n , ll r){
 
 void init(){ f() ; g() ; }
 
-int n , m , b , w ;
+int n , m , p ;
+ll W[101] ;
+
+// i番目のW, j個引く, uniqueがk個
+ll dp[55][55][55] , U[55][55] ;
 
 int main(){
-    cin >> n >> m >> b >> w ;
+    fast_input_output
     init() ;
-    ll res = 0 ;
-    rrep(x,1,n+1) rrep(y,1,m+1){
-        ll sum = 0 ;
-        rep(xi,x+1) rep(yi,y+1){
-            if((xi+yi)%2==0) sum += combination(x,xi) * combination(y,yi) % mod * combination((x-xi)*(y-yi),b) % mod ;
-            if((xi+yi)%2==1) sum -= combination(x,xi) * combination(y,yi) % mod * combination((x-xi)*(y-yi),b) % mod ;
-            (sum += mod) %= mod ;
+    cin >> n >> m >> p ;
+    ll S = 0 ;
+    rep(i,n) cin >> W[i] , S += W[i] ;
+    rep(i,n) (W[i] *= powmod(S,mod-2)) %= mod ;
+    rep(i,n) rep(j,p+1) U[i][j] = powmod(W[i],j) ;
+
+    dp[0][0][0] = 1 ;
+    rep(i,n) rep(j,p+1) rep(k,i+1) {
+        (dp[i+1][j][k] += dp[i][j][k]) %= mod ;
+        rrep(a,1,p+1){
+            if(j + a > p) continue ;
+            (dp[i+1][j+a][k+1] += dp[i][j][k] * U[i][a] % mod * inv[a] % mod) %= mod ;
         }
-        (sum *= combination(n,x) * combination(m,y) % mod) %= mod ;
-        (sum *= combination((n-x)*(m-y),w)) %= mod ;
-        (res += sum) %= mod ;
     }
+    ll res = dp[n][p][m] * permutation(p,p) % mod ;
     cout << res << endl ;
 }

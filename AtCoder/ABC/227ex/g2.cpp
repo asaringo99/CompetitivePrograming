@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -12,6 +13,8 @@ typedef tuple<ll,ll,ll> TP ;
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
+
+const int mod = 998244353 ;
 
 struct FastPrimeFactorization{
 
@@ -69,9 +72,35 @@ struct FastPrimeFactorization{
         vector<int> getPrime() { return prime ; }
 };
 
+ll n , k ;
+unordered_map<ll,int> mp ;
+vector<ll> v ;
+
 int main(){
-    int n , k;
+    fast_input_output
     cin >> n >> k ;
-    FastPrimeFactorization A(n) ;
-    for(int p : A.primeFactor(k)) cout << p << endl ;
+    FastPrimeFactorization fpf(1000001) ;
+    ll m = n - k + 1 ;
+    for(ll x = m ; x <= n ; x++) v.push_back(x) ;
+    for(int u : fpf.getPrime()){
+        ll p = m % u == 0 ? m : (m / u + 1) * u ;
+        p -= m ;
+        for(ll x = p ; x < k ; x += u){
+            if(v[x] % u != 0) continue ;
+            while(v[x] % u == 0){
+                v[x] /= u ;
+                mp[u]++ ;
+            }
+        }
+    }
+    for(ll u : v) mp[u]++ ;
+    for(int i = 2 ; i <= k ; i++){
+        for(P p : fpf.primeFactorization(i)) mp[p.first] -= p.second ;
+    }
+    ll res = 1 ;
+    for(auto it : mp) {
+        if(it.first == 1) continue ;
+        (res *= (it.second + 1)) %= mod ;
+    }
+    cout << res << endl ;
 }

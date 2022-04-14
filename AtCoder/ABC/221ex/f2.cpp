@@ -13,6 +13,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
+const int mod = 998244353 ;
 
 struct TreeDiameter{
     private :
@@ -105,14 +106,68 @@ struct TreeDiameter{
         P get_end_node() { return P(start_node,end_node) ; }
 };
 
+vector<vector<int>> G ;
+
+int dep[202020] ;
+int dp[202020] ;
+int diameter , lca ;
+int lef , rig ;
+ll res ;
+
+void dfseven(int v , int prev , int d){
+    if(d == diameter / 2) dp[v] = 1 ;
+    for(int i = 0 ; i < G[v].size() ; i++){
+        int u = G[v][i] ;
+        if(u == prev) continue ;
+        dfseven(u,v,d+1) ;
+        dp[v] += dp[u] ;
+    }
+    if(v == lca){
+        ll val = 0 ;
+        res = 1 ;
+        for(int i = 0 ; i < G[v].size() ; i++){
+            int u = G[v][i] ;
+            (res *= dp[u] + 1) %= mod ;
+            (val += dp[u]) %= mod ;
+        }
+        (val += 1) %= mod ;
+        res = (res - val + mod) % mod ;
+    }
+}
+
+ll dfsodd(int v , int prev , int d){
+    if(d == diameter) return 1 ;
+    ll res = 0 ;
+    for(int i = 0 ; i < G[v].size() ; i++){
+        int u = G[v][i] ;
+        if(u == prev) continue ;
+        res += dfsodd(u,v,d+1) ;
+    }
+    return res ;
+}
+
 int n ;
+
 int main(){
     cin >> n ;
-    TreeDiameter G(n) ;
+    TreeDiameter TD(n) ;
     rep(i,n-1){
-        int u , v ;
+        int v , u ;
         cin >> u >> v ;
         u-- ; v-- ;
-        G.add_edge(u,v) ;
+        TD.add_edge(u,v) ;
+    }
+    TD.build() ;
+    diameter = TD.get_diameter() ;
+    lca = TD.get_lca() ;
+    G = TD.get_graph() ;
+    auto [sn,gn] = TD.get_end_node() ;
+    if(diameter % 2 == 0){
+        dfseven(lca,-1,0) ;
+        cout << res << endl ;
+    }
+    else{
+        res = dfsodd(sn,-1,0) * dfsodd(gn,-1,0) % mod ;
+        cout << res << endl ;
     }
 }

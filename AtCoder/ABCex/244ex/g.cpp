@@ -14,10 +14,31 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , m ;
+vector<int> G[202020] ;
+string S ;
+bool C[202020] ;
+int cnt[202020] ;
+
+void bfs(){
+    queue<int> que ;
+    que.push(0) ;
+    while(que.empty()){
+        
+    }
+}
 
 int main(){
     fast_input_output
-    cin >> n ;
+    cin >> n >> m ;
+    rep(i,m){
+        int u , v ;
+        cin >> u >> v ;
+        u-- ; v-- ;
+        G[u].push_back(v) ;
+        G[v].push_back(u) ;
+    }
+    cin >> S ;
+    rep(i,n) C[i] = S[i] == '1' ? true : false ;
 
 }

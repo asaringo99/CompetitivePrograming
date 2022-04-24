@@ -14,10 +14,22 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+const int mod = 998244353 ;
+
+ll n , m , k ;
+ll dp[55][3030] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> m >> k ;
+    dp[0][0] = 1 ;
+    rep(i,n) rep(j,k+1){
+        rrep(x,1,m+1){
+            if(j+x>k) continue ;
+            (dp[i+1][j+x] += dp[i][j]) %= mod ;
+        }
+    }
+    ll res = 0 ;
+    rep(i,k+1) (res += dp[n][i]) %= mod ;
+    cout << res << endl ;
 }

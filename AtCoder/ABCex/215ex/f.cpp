@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -13,7 +14,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 1000000007 ;
+const int mod = 998244353 ;
 const int MAX_N = 505050 ;
 
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
@@ -58,17 +59,25 @@ ll permutation(ll n , ll r){
 void init(){ f() ; g() ; }
 
 int n ;
+unordered_map<int,int> mp , cp ;
 
 int main(){
+    fast_input_output
     init() ;
     cin >> n ;
-    rrep(k,1,n+1){
-        ll sum = 0 ;
-        rrep(x,1,n+1){
-            if(n < (x - 1) * (k - 1)) break ;
-            sum += combination(n - (x - 1) * (k - 1), x) ;
-            sum %= mod ;
+    rep(i,n){
+        int c ;
+        cin >> c ;
+        mp[c]++ ;
+    }
+    for(auto it : mp) cp[it.second]++ ;
+    rrep(i,1,n+1){
+        ll res = 0 ;
+        for(auto it : cp){
+            int m = n - it.first ;
+            (res += combination(n,i) * it.second % mod - combination(m,i) * it.second % mod + mod) %= mod ;
         }
-        cout << sum << endl ;
+        (res *= powmod(combination(n,i),mod-2)) %= mod ; 
+        cout << res << endl ;
     }
 }

@@ -14,10 +14,15 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+ll a , b , k ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> a >> b >> k ;
+    int count = 0 ;
+    while(a < b){
+        a *= k ;
+        count++ ;
+    }
+    cout << count << endl ;
 }

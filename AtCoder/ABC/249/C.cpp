@@ -14,10 +14,27 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , k ;
+set<char> st[20] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> k ;
+    rep(i,n){
+        string S ;
+        cin >> S ;
+        for(char u : S) st[i].insert(u) ;
+    }
+    int res = 0 ;
+    rep(S,1<<n){
+        int sum = 0 ;
+        if(bit_count(S) < k) continue ;
+        map<char,int> mp ;
+        rep(i,n) if(S >> i & 1){
+            for(char u : st[i]) mp[u]++ ;
+        }
+        for(auto it : mp) if(it.second == k) sum++ ;
+        chmax(res,sum) ;
+    }
+    cout << res << endl ;
 }

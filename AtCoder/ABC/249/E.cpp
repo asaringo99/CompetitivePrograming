@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -13,7 +14,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 1000000007 ;
+int mod ;
 const int MAX_N = 505050 ;
 
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
@@ -52,6 +53,7 @@ ll combination(ll n , ll r){
 }
 
 ll permutation(ll n , ll r){
+    if(n < 0 || r < 0 || n < r) return 0 ;
     return fac[n] * inv[n-r] % mod ;
 }
 
@@ -59,16 +61,34 @@ void init(){ f() ; g() ; }
 
 int n ;
 
+ll dp[3030][3030] ;
+ll S[3030] ;
+
 int main(){
-    init() ;
-    cin >> n ;
-    rrep(k,1,n+1){
-        ll sum = 0 ;
-        rrep(x,1,n+1){
-            if(n < (x - 1) * (k - 1)) break ;
-            sum += combination(n - (x - 1) * (k - 1), x) ;
-            sum %= mod ;
+    fast_input_output
+    cin >> n >> mod ;
+    dp[0][0] = 1 ;
+    dp[1][0] = -1 ;
+    rep(i,n) rep(j,n) {
+        ll val = i == 0 ? 26 : 25 ;
+        if(i + 1 <= n){
+            (dp[i+1][j+2] += dp[i][j] * val) %= mod ;
         }
-        cout << sum << endl ;
+        if(i + 10 <= n){
+            ((dp[i+10][j+2] -= (dp[i][j] * val % mod)) += mod) %= mod ;
+            (dp[i+10][j+3] += dp[i][j] * val) %= mod ;
+        }
+        if(i + 100 <= n){
+            ((dp[i+100][j+3] -= (dp[i][j] * val % mod)) += mod) %= mod ;
+            (dp[i+100][j+4] += dp[i][j] * val) %= mod ;
+        }
+        if(i + 1000 <= n){
+            ((dp[i+1000][j+4] -= (dp[i][j] * val % mod)) += mod) %= mod ;
+            (dp[i+1000][j+5] += dp[i][j] * val) %= mod ;
+        }
+        (dp[i+1][j] += dp[i][j]) %= mod ;
     }
+    ll res = 0 ;
+    rep(i,n) (res += dp[n][i]) %= mod ;
+    cout << res << endl ;
 }

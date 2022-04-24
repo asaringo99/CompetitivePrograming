@@ -14,10 +14,25 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
+int mod ;
+
 int n ;
+ll dp[3030][3030][2][2][2][2] ;
+
+// |_
+// 
+//  _
+//  _
+//
+//  _
+// |
 
 int main(){
     fast_input_output
-    cin >> n ;
+    cin >> n >> mod ;
 
+    dp[1][0][1][1][1][1] = 1 ;
+    rep(i,n){
+
+    }
 }

@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -13,7 +14,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 1000000007 ;
+const int mod = 998244353 ;
 const int MAX_N = 505050 ;
 
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
@@ -47,7 +48,6 @@ void g(){
 
 //nCrの計算
 ll combination(ll n , ll r){
-    if(n < 0 || r < 0 || n < r) return 0 ;
     return fac[n] * inv[n-r] % mod * inv[r] % mod ;
 }
 
@@ -58,17 +58,27 @@ ll permutation(ll n , ll r){
 void init(){ f() ; g() ; }
 
 int n ;
+string S ;
+ll dp[5050][5050] ;
+ll C[30] ;
 
 int main(){
+    fast_input_output
     init() ;
-    cin >> n ;
-    rrep(k,1,n+1){
-        ll sum = 0 ;
-        rrep(x,1,n+1){
-            if(n < (x - 1) * (k - 1)) break ;
-            sum += combination(n - (x - 1) * (k - 1), x) ;
-            sum %= mod ;
+    cin >> S ;
+    n = S.size() ;
+    rep(i,n) C[S[i]-'a']++ ;
+    dp[0][0] = 1 ;
+    rep(i,26){
+        rep(j,n+1){
+            rep(k,C[i]+1){
+                dp[i+1][j+k] += dp[i][j] * combination(k+j,j) % mod ;
+                dp[i+1][j+k] %= mod ;
+            }
         }
-        cout << sum << endl ;
     }
+    ll res = 0 ;
+    rep(i,n+1) (res += dp[26][i]) %= mod ;
+    res = (res - 1 + mod) % mod ;
+    cout << res << endl ;
 }

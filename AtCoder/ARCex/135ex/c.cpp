@@ -15,9 +15,26 @@ typedef tuple<ll,ll,ll> TP ;
 #define endl "\n"
 
 int n ;
+int A[303030] ;
+vector<ll> B(40,0) ;
 
 int main(){
     fast_input_output
     cin >> n ;
-
+    ll res = 0 ;
+    rep(i,n){
+        ll a ;
+        cin >> a ;
+        A[i] = a ;
+        rep(j,30) if(a >> j & 1) B[j]++ ;
+        res += a ;
+    }
+    rep(i,n){
+        vector<ll> C = B ;
+        rep(j,30) if(A[i] >> j & 1) C[j] = n - C[j] ;
+        ll sum = 0 ;
+        rep(j,30) sum += (1LL << j) * C[j] ;
+        chmax(res,sum) ;
+    }
+    cout << res << endl ;
 }

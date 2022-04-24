@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -47,7 +48,6 @@ void g(){
 
 //nCrの計算
 ll combination(ll n , ll r){
-    if(n < 0 || r < 0 || n < r) return 0 ;
     return fac[n] * inv[n-r] % mod * inv[r] % mod ;
 }
 
@@ -57,18 +57,22 @@ ll permutation(ll n , ll r){
 
 void init(){ f() ; g() ; }
 
-int n ;
+int n , a , b , c , d ;
+ll dp[1010][1010] ;
 
 int main(){
+    fast_input_output
     init() ;
-    cin >> n ;
-    rrep(k,1,n+1){
-        ll sum = 0 ;
-        rrep(x,1,n+1){
-            if(n < (x - 1) * (k - 1)) break ;
-            sum += combination(n - (x - 1) * (k - 1), x) ;
-            sum %= mod ;
+    cin >> n >> a >> b >> c >> d ;
+    dp[a][0] = 1 ;
+    rrep(i,a,b+1) rep(j,n+1) {
+        (dp[i+1][j] += dp[i][j]) %= mod ;
+        rrep(x,c,d+1) {
+            if(j + x * i > n) break ;
+            ll val = permutation(n-j,x*i) * powmod(powmod(permutation(i,i),x),mod-2) % mod * powmod(permutation(x,x),mod-2) % mod ;
+            (dp[i+1][j+x*i] += dp[i][j] * val % mod) %= mod ;
         }
-        cout << sum << endl ;
     }
+
+    cout << dp[b+1][n] << endl ;
 }

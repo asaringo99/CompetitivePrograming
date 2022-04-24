@@ -14,10 +14,18 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int a , b , c , d , e , f , x ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
-}
+    cin >> a >> b >> c >> d >> e >> f >> x ;
+    int g = a + c , h = d + f ;
+    int ta = x / g * a * b , ao = x / h * d * e ;
+    int mt = x % g <= a ? (x % g) * b : a * b ;
+    int ma = x % h <= d ? (x % h) * e : d * e ;
+    ta += mt ;
+    ao += ma ;
+    if(ta > ao) cout << "Takahashi" << endl ;
+    else if(ta < ao) cout << "Aoki" << endl ;
+    else cout << "Draw" << endl ;
+} 

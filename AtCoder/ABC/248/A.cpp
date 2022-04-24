@@ -15,9 +15,14 @@ typedef tuple<ll,ll,ll> TP ;
 #define endl "\n"
 
 int n ;
+string S ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> S ;
+    set<int> st ;
+    rep(i,10) st.insert(i) ;
+    for(char u : S) st.erase(u-'0') ;
+    auto it = st.begin() ;
+    cout << *it << endl ;
 }

@@ -14,10 +14,21 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int x , y , z , k ;
+ll A[1010] , B[1010] , C[1010] ;
+vector<ll> D , E ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> x >> y >> z >> k ;
+    rep(i,x) cin >> A[i] ;
+    rep(i,y) cin >> B[i] ;
+    rep(i,z) cin >> C[i] ;
+    rep(i,x) rep(j,y) D.push_back(A[i]+B[j]) ;
+    sort(D.begin(),D.end(),greater<ll>()) ;
+    int m = min(k,(int)D.size()) ;
+    rep(i,m) rep(j,z) E.push_back(D[i]+C[j]) ;
+    sort(E.begin(),E.end(),greater<ll>()) ;
+    ll res = 0 ;
+    rep(i,k) cout << E[i] << endl ;
 }

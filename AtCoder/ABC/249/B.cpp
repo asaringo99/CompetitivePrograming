@@ -13,11 +13,26 @@ typedef tuple<ll,ll,ll> TP ;
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
+#define a_z "abcdefghijklmnopqrstuvwxyz"
+#define A_Z "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 int n ;
+string S ;
+set<char> ST, st ;
+set<char> mp ;
 
 int main(){
     fast_input_output
-    cin >> n ;
+    cin >> S ;
+    bool a = false , b = false , c = false ;
+    n = S.size() ;
+    for(char u : a_z) st.insert(u) ;
+    for(char u : A_Z) ST.insert(u) ;
 
+    for(char u : S) mp.insert(u) ;
+    for(char u : S) if(st.count(u) == 1) a = true ;
+    for(char u : S) if(ST.count(u) == 1) b = true ;
+    if((int)mp.size() == n) c = true ;
+    if(a && b && c) cout << "Yes" << endl ;
+    else cout << "No" << endl ;
 }

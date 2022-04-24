@@ -13,7 +13,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 1000000007 ;
+const int mod = 998244353 ;
 const int MAX_N = 505050 ;
 
 ll inv[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
@@ -47,7 +47,6 @@ void g(){
 
 //nCrの計算
 ll combination(ll n , ll r){
-    if(n < 0 || r < 0 || n < r) return 0 ;
     return fac[n] * inv[n-r] % mod * inv[r] % mod ;
 }
 
@@ -57,18 +56,25 @@ ll permutation(ll n , ll r){
 
 void init(){ f() ; g() ; }
 
-int n ;
+int n , k ;
+unordered_map<ll,ll> dp[55][55] ;
 
 int main(){
     init() ;
-    cin >> n ;
-    rrep(k,1,n+1){
-        ll sum = 0 ;
+    cin >> n >> k ;
+    dp[0][0][1] = 1 ;
+    rep(i,n) rep(j,n+1) for(auto it : dp[i][j]){
+        auto [l,val] = it ;
         rrep(x,1,n+1){
-            if(n < (x - 1) * (k - 1)) break ;
-            sum += combination(n - (x - 1) * (k - 1), x) ;
-            sum %= mod ;
+            if(i + x > n) break ;
+            (dp[i+x][j+1][lcm(l,(ll)x)] += val * permutation(n-i,x) % mod * powmod(x,mod-2) % mod) %= mod ;
         }
-        cout << sum << endl ;
     }
+    ll res = 0 ;
+    rrep(i,1,n+1) for(auto it : dp[n][i]){
+        auto [x,val] = it ;
+        res += powmod(x,k) * val % mod * powmod(permutation(i,i),mod-2) ;
+        res %= mod ;
+    }
+    cout << res << endl ;
 }

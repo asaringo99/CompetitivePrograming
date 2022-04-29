@@ -15,6 +15,18 @@
         "*.tcc": "cpp",
         "iosfwd": "cpp",
         "valarray": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "__split_buffer": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "initializer_list": "cpp",
+        "queue": "cpp",
+        "span": "cpp",
+        "stack": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp",
+        "utility": "cpp"
     }
 }

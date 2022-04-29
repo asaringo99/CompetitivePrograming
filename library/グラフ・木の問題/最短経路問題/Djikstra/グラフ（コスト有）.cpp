@@ -1,9 +1,17 @@
 #include <bits/stdc++.h>
 using namespace std ;
 typedef long long ll ;
-typedef pair<ll,int> P ;
+typedef long double ld ;
+typedef pair<ll,ll> P ;
+typedef tuple<ll,ll,ll> TP ;
+#define chmin(a,b) a = min(a,b)
+#define chmax(a,b) a = max(a,b)
+#define bit_count(x) __builtin_popcountll(x)
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) a / gcd(a,b) * b
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
+#define endl "\n"
 
 struct edge{
     int to ;
@@ -37,7 +45,8 @@ void djikstra(){
 int main(){
     cin >> n >> m ;
     rep(i,m){
-        ll v , u , c ;
+        int v , u ;
+        ll c ;
         cin >> v >> u >> c ;
         v-- ; u-- ;
         G[v].push_back(edge{u,c}) ;

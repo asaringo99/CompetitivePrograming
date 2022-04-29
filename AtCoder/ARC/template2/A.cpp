@@ -15,9 +15,30 @@ typedef tuple<ll,ll,ll> TP ;
 #define endl "\n"
 
 int n ;
+int T[101010] ;
 
 int main(){
     fast_input_output
     cin >> n ;
-
+    rep(i,n) cin >> T[i] ;
+    ll a = 0 ;
+    rep(i,n){
+        bool ok = false ;
+        rep(j,T[i]+1){
+            if(j == T[i]){
+                if(a >> j & 1){
+                    if(!ok) a += 2LL * (ll)(1LL << j) ;
+                }
+                else{
+                    a += (ll)(1LL << (ll)j) ;
+                }
+                break ;
+            }
+            if(a >> j & 1){
+                a += (ll)(1LL << j) ;
+                ok = true ;
+            }
+        }
+    }
+    cout << a << endl ;
 }

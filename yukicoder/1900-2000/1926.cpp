@@ -14,10 +14,18 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int t ;
+
+void solve(){
+    ll n , m , k ;
+    cin >> n >> m >> k ;
+    ll x = k % m ;
+    if(x >= m - n) cout << 0 << endl ;
+    else cout << x << endl ;
+}
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> t ;
+    rep(i,t) solve() ;
 }

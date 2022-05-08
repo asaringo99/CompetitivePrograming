@@ -14,7 +14,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define endl "\n"
 
 struct PrimeFactorization{
-    ll n ;
+    ll n , x ; // x: euler
     vector<P> res ;
     PrimeFactorization(ll n_){
         n = n_ ;
@@ -23,6 +23,7 @@ struct PrimeFactorization{
 
     void build(){
         ll m = n ;
+        x = n ;
         for(ll i = 2 ; i * i <= m ; i++){
             if(m % i != 0) continue ;
             int ex = 0 ;
@@ -31,17 +32,23 @@ struct PrimeFactorization{
                 ex++ ;
             }
             res.push_back(P(i,ex)) ;
+            x -= x / i ;
         }
-        if(m != 1) res.push_back(P(m,1)) ;
+        if(m != 1) {
+            res.push_back(P(m,1)) ;
+            x -= x / m ;
+        }
     }
 
     vector<P> primeFactor() { return res ; }
-    int origin() { return n ; }
+    // オイラーのφ関数
+    ll euler_phi() { return x ; }
 };
 
 int main(){
     ll n ;
     cin >> n ;
     PrimeFactorization A(n) ;
+    cout << A.euler_phi() << endl ;
     for(P p : A.primeFactor()) cout << p.first << " " << p.second << endl ;
 }

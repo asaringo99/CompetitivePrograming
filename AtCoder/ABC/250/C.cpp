@@ -14,10 +14,30 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , q ;
+int A[202020] , B[202020] ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> q ;
+    rep(i,n) A[i] = i , B[i] = i ;
+    rep(i,q){
+        int x ;
+        cin >> x ;
+        x-- ;
+        int k = B[x] ;
+        if(k != n - 1){
+            int a = A[(k+1)%n] ;
+            B[a] = k ;
+            B[x] = (k + 1) % n ;
+            swap(A[k],A[(k+1)%n]) ;
+        }
+        else{
+            int a = A[k-1] ;
+            B[a] = k ;
+            B[x] = (k - 1) ;
+            swap(A[k],A[(k-1)]) ;
+        }
+    }
+    rep(i,n) cout << A[i] + 1 << " " ; cout << endl ;
 }

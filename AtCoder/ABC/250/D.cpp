@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -12,6 +13,7 @@ typedef tuple<ll,ll,ll> TP ;
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
+
 
 struct FastPrimeFactorization{
 
@@ -86,10 +88,27 @@ struct FastPrimeFactorization{
         bool isPrime(int i) { return isprime[i] ; }
 };
 
+ll n ;
+
 int main(){
-    int n , k;
-    cin >> n >> k ;
-    FastPrimeFactorization A(n) ;
-    cout << A.getEulerPhi(k) << endl ;
-    for(int p : A.primeFactor(k)) cout << p << endl ;
+    // fast_input_output
+    FastPrimeFactorization fpf(2020202) ;
+    vector<int> prime = fpf.getPrime() ;
+    int m = prime.size() ;
+    cin >> n ;
+    ll res = 0 ;
+    for(ll q = 3 ; q * q * q <= n ; q++){
+        if(!fpf.isPrime(q)) continue;
+        auto it = lower_bound(prime.begin(),prime.end(),q) ;
+        int id = it - prime.begin() ;
+        ll lef = 0 , rig = id ;
+        ll val = n / (q * q * q) ;
+        while(rig - lef > 1){
+            ll mid = (lef + rig) / 2 ;
+            if(val >= prime[mid]) lef = mid ;
+            else rig = mid ;
+        }
+        if(val >= prime[lef]) res += lef + 1 ;
+    }
+    cout << res << endl ;
 }

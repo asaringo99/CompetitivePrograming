@@ -14,10 +14,18 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , a , b ;
+
+
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> n >> a >> b ;
+    rep(i,n*a){
+        rep(j,n*b){
+            if((i%(2*a)<a && j%(2*b)<b)||(i%(2*a)>=a && j%(2*b)>=b)) cout << '.' ;
+            else cout << "#" ;
+        }
+        cout << endl ;
+    }
 }

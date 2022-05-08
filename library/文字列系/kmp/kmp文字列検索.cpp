@@ -44,7 +44,10 @@ vector<int> kmp(const string& str, const string& word) {
 
 // 例題 S := abcabcabcabcabcabc , P = abc => ans := 6
 int main(){
-    S = "abababababc" ;
-    P = "abababc" ;
-    cout << kmp(S,P).size() << endl ;
+    S = "abcdabcdabcdabab" ;
+    P = "ab" ;
+    // cout << kmp(S,P).size() << endl ;
+    vector<int> vvv = makeTable(S) ;
+    for(int u : vvv) cout << u << " " ; cout << endl ;
+
 }

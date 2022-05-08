@@ -14,10 +14,29 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int h , w , r , c ;
 
 int main(){
     fast_input_output
-    cin >> n ;
-
+    cin >> h >> w >> r >> c ;
+    int res = 4 ;
+    if(h == 1 && w == 1){
+        cout << 0 << endl ;
+        return 0 ;
+    }
+    if(h == 1){
+        res = 2 ;
+        if(w == c || c == 1) res-- ;
+        cout << res << endl ;
+        return 0 ;
+    }
+    if(w == 1){
+        res = 2 ;
+        if(r == h || r == 1) res-- ;
+        cout << res << endl ;
+        return 0 ;
+    }
+    if(r == h || r == 1) res-- ;
+    if(c == w || c == 1) res-- ;
+    cout << res << endl ;
 }

@@ -37,6 +37,6 @@ int main(){
     S = "abcdefghiabcdefghi" ;
     kmp(S) ;
     int ans = 0 ;
-    rep(i,S.size()+1) ans = max(ans,A[i]) ;
+    rep(i,S.size()+1) cout << A[i] << " " ; cout << endl ;
     cout << ans << endl ;
 }

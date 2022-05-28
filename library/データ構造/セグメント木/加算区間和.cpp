@@ -6,11 +6,12 @@ typedef long long ll ;
 
 template<typename T>
 struct SegmentTree{
-    int n ;
+    int n , n_;
     vector<T> dat ;
-    SegmentTree(int n_){
+    SegmentTree(int _n){
+        n_ = _n ;
         n = 1 ;
-        while(n < n_) n *= 2 ;
+        while(n < _n) n *= 2 ;
         dat.resize(2 * n - 1,0) ;
     }
     void add(int k , T x){
@@ -31,13 +32,15 @@ struct SegmentTree{
     T query(int a , int b){
         return sub_query(a,b,0,0,n) ;
     }
-    T binary_search(int k){
-        ll lef = 0 , rig = n ;
+    T binary_search(int a , T k){
+        int lef = a , rig = n_ ;
         while(rig - lef > 1){
-            ll mid = (lef + rig) / 2 ;
-            if(query(0,mid) < k) lef = mid ;
-            else rig = mid ;
+            int mid = (lef + rig) / 2 ;
+            if(query(a,mid) => k) rig = mid ;
+            else lef = mid ;
         }
-        return rig ;
+        return lef ;
     }
 };
+
+//  binary_search(int a , int k) : 区間和[a,x) が k 以上にならない最大の index 番号を返す

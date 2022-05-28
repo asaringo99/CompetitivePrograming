@@ -36,6 +36,15 @@ struct SCC{
         vector<vector<int>> restore ;
         map<P,bool> go ;
 
+        void init_(int n_){
+            n = n_ ;
+            G.resize(n) ; F.resize(n) ;
+            used.resize(n,false) ; reused.resize(n,false) ;
+            conv.resize(n) ;
+            volume.resize(n) ;
+            gragh_size = 0 ;
+        }
+
         void dfs(int v){
             used[v] = true ;
             for(int i = 0 ; i < G[v].size() ; i++){
@@ -97,7 +106,8 @@ struct SCC{
             volume.resize(n) ;
             gragh_size = 0 ;
         }
-        
+        SCC(){}
+        void init(int n_) { init_(n_) ; }
         void build() { build_() ; }
         void add_edge(int v , int u) { add_edge_(v,u) ; }
         int convert(int v) { return conv[v] ; } // ノード v は新たなグラフ H 上においてどのノードに変化するか
@@ -110,6 +120,9 @@ struct SCC{
 
 // function                    : return              : description
 // -----------------------------------------------------------------
+// constructor(int n)          :                     : 元のグラフのサイズが n である構造体を作る
+// constructor()               :                     : コンストラクタを行わない場合に利用
+// init(int n)                 : void                : 元のグラフのサイズが n である構造体を作る
 // build()                     : void                : ビルドを行う
 // add_edge(u,v)               : void                : 有向辺グラフ G と逆辺グラフ F を張る
 // convert(u)                  : int                 : 元のグラフ G のノード u が新たなグラフ H におけるどのノードに変異したか
@@ -128,10 +141,11 @@ struct SCC{
 
 int n , m ;
 vector<vector<int>> G ; // 新たなグラフ
+SCC scc ;
 
 int main(){
     cin >> n >> m ;
-    SCC scc(n) ;
+    scc.init(n) ;
     rep(i,m){
         int a , b ;
         cin >> a >> b ;
@@ -143,4 +157,5 @@ int main(){
     G = scc.get_new_gragh() ;
     // SCC後に得られたグラフのノード数
     int n_ = scc.get_new_gragh_size() ;
+    cout << n_ << endl ;
 }

@@ -4,18 +4,6 @@ typedef long long ll ;
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 
-// 幾何ライブラリ機能一覧
-// Solution構造体
-// 1. 射影            projection           引数 : 直線,点      返り値 : 座標
-// 2. 反射            refrection           引数 : 直線,点      返り値 : 座標
-// 3. ３点の位置関係    ccw                  引数 : 点,点,点     返り値 : 位置関係
-// 4. 直線の直交判定    isOrthogonal         引数 : 直線,直線    返り値 : bool値
-// 5. 直線の平行判定    isParallel           引数 : 直線,直線    返り値 : bool値
-// 6. 交差判定（線分）  isIntersectSegment   引数 : 線分,線分     返り値 : bool値
-// 7. 交差判定（直線）  isIntersectLine      引数 : 直線,直線     返り値 : bool値
-// 8. 直線の交点（線分） crossPointSegment    引数 : 直線,直線    返り値 : 座標
-// 9. 直線の交点（直線） crossPointLine       引数 : 直線,直線    返り値 : 座標
-
 double EPS = 1e-10 ;
 const double PI = 3.1415926535 ;
 
@@ -203,6 +191,18 @@ void LineInput(double x0 , double y0 , double x1 , double y1 , double &A , doubl
     B = -x1+x0 ;
     C = (y1-y0)*x1-(x1-x0)*y1 ;
 }
+
+// 幾何ライブラリ機能一覧
+// Solution構造体
+// 1. 射影            projection           引数 : 直線,点      返り値 : 座標
+// 2. 反射            refrection           引数 : 直線,点      返り値 : 座標
+// 3. ３点の位置関係    ccw                  引数 : 点,点,点     返り値 : 位置関係
+// 4. 直線の直交判定    isOrthogonal         引数 : 直線,直線    返り値 : bool値
+// 5. 直線の平行判定    isParallel           引数 : 直線,直線    返り値 : bool値
+// 6. 交差判定（線分）  isIntersectSegment   引数 : 線分,線分     返り値 : bool値
+// 7. 交差判定（直線）  isIntersectLine      引数 : 直線,直線     返り値 : bool値
+// 8. 直線の交点（線分） crossPointSegment    引数 : 直線,直線    返り値 : 座標
+// 9. 直線の交点（直線） crossPointLine       引数 : 直線,直線    返り値 : 座標
 
 int main(){
     // 入力

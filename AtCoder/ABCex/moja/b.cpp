@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -13,25 +14,18 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-const int mod = 1000000007 ;
-
 int n ;
-string s ;
-ll dp[3030][3030] ;
+string S ;
+set<char> st ;
+
 
 int main(){
-    cin >> n >> s ;
-    rep(i,n) dp[0][i]++ ;
-    rep(i,n-1){
-        vector<ll> S(n+1) ;
-        S[0] = dp[i][0] ;
-        rrep(j,1,n-i) S[j] = (S[j-1] + dp[i][j]) % mod ;
-        if(s[i] == '>'){
-            rep(j,n-1-i) dp[i+1][j] = (S[n-1-i] - S[j] + mod) % mod ;
-        }
-        if(s[i] == '<'){
-            rep(j,n-1-i) dp[i+1][j] = S[j] ;
-        }
+    fast_input_output
+    cin >> n >> S ;
+    for(char u : S) st.insert(u) ;
+    if(st.size() == 1){
+        if(st.count('A') == 1) cout << 'A' << endl ;
+        else cout << 'B' << endl ;
     }
-    cout << dp[n-1][0] << endl ;
+    else cout << '?' << endl ;
 }

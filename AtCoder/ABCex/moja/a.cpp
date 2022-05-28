@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -13,9 +14,11 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-int n ;
+int n , p ;
 
 int main(){
-    cin >> n ;
-
+    fast_input_output
+    cin >> n >> p ;
+    if(p != n * p) cout << "Yes" << endl ;
+    else cout << "No" << endl ;
 }

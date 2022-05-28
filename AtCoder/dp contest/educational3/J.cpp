@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std ;
-#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
 typedef long double ld ;
 typedef pair<ll,ll> P ;
@@ -15,28 +14,29 @@ typedef tuple<ll,ll,ll> TP ;
 #define endl "\n"
 
 int n ;
-int A[303] , S[3] ;
+
 ld dp[303][303][303] ;
 
-ld rec(int i , int j , int k){
-    if(i == 0 && j == 0 && k == 0) return dp[i][j][k] = 0 ;
-    if(dp[i][j][k] != -1) return dp[i][j][k] ;
-    ld sum = i + j + k ;
-    ld e = (ld)n / sum ;
-    ld res = e ;
-    if(i != 0) res += i / sum * rec(i-1,j,k) ;
-    if(j != 0) res += j / sum * rec(i+1,j-1,k) ;
-    if(k != 0) res += k / sum * rec(i,j+1,k-1) ;
-    return dp[i][j][k] = res ;
-}
-
 int main(){
-    fast_input_output
     cin >> n ;
-    rep(i,n) {
-        cin >> A[i] ;
-        S[A[i]-1]++ ;
+    int a = 0 , b = 0 , c = 0 ;
+    rep(i,n){
+        int x ;
+        cin >> x ;
+        if(x == 1) c++ ;
+        if(x == 2) b++ ;
+        if(x == 3) a++ ;
     }
-    rep(i,n+1) rep(j,n+1) rep(k,n+1) dp[i][j][k] = -1 ;
-    cout << fixed << setprecision(25) << rec(S[0],S[1],S[2]) << endl ;
+    dp[0][0][0] = 0 ;
+    rep(i,301) rep(j,301) rep(k,301){
+        int sum = i + j + k ;
+        if(sum == 0) continue ;
+        ld c = (ld)n / sum ;
+        ld e = c ;
+        if(i != 0) e += (ld)i / sum * dp[i-1][j+1][k] ;
+        if(j != 0) e += (ld)j / sum * dp[i][j-1][k+1] ;
+        if(k != 0) e += (ld)k / sum * dp[i][j][k-1] ;
+        dp[i][j][k] = e ;
+    }
+    cout << fixed << setprecision(25) << dp[a][b][c] << endl ;
 }

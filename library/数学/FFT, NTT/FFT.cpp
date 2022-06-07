@@ -88,6 +88,6 @@ int main(){
     vector<ll> A(n+1) , B(n+1) ;
     A[0] = 0 , B[0] = 0 ;
     rep(i,n) cin >> A[i+1] >> B[i+1] ;
-    FFT vec(A,B) ; vec.build() ;
+    FFT vec(A,B) ;
     rrep(i,1,2*n+1) cout << vec[i] << endl ;
 }

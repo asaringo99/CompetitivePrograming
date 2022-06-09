@@ -46,8 +46,8 @@ struct FFT{
     inline vector<complex<ld>> sub_fft(vector<complex<ld>> A , bool inverse){
         int logn = 0 ;
         for(int i = 0 ; 1 << i < n ; i++) logn++ ;
+        // バタフライ演算
         arrangeIndexForBatafly(A,logn) ;
-        // バタフライ冤罪院
         for(int block = 1 ; block < n ; block *= 2){
             // block内 の j 番目に対する処理
             for(int j = 0 ; j < block ; j++){

@@ -118,8 +118,8 @@ struct NTT{
         }
         // FFT, IFFT のロジック
         inline vector<modint> sub_fft(vector<modint> A , bool inverse){
+            // バタフライ演算
             arrangeIndexForBatafly(A,logn) ;
-            // バタフライ冤罪院
             int lg = 1 ;
             for(int block = 1 ; block < n ; block *= 2){
                 // block内 の j 番目に対する処理

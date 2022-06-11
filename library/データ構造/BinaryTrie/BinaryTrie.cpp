@@ -41,7 +41,6 @@ struct BinaryTrie {
             else {
                 auto &to = nxt[bit >> bit_index & 1] ;
                 if(!to) to = new BinaryTrie() ;
-                to->root = this ;
                 int i = bit_index - 1 ;
                 to->push(bit, i, id, dupe) ;
                 exist++ ;
@@ -49,7 +48,7 @@ struct BinaryTrie {
             }
         }
 
-        void erase(const T &bit, int bit_index, bool dupe) {
+        void erase(const T &bit, int bit_index, bool dupe = false) {
             eval(bit_index);
             if(bit_index == -1) {
                 exist-- ;
@@ -62,19 +61,19 @@ struct BinaryTrie {
             }
         }
 
-        BinaryTrie *find(BinaryTrie* t, T bit, int bit_index) {
+        BinaryTrie *find(T bit, int bit_index) {
             eval(bit_index) ;
             if(bit_index == -1) {
-                return t ;
+                return this ;
             }
             else{
-                auto &to = t->nxt[bit >> bit_index & 1] ;
-                return to ? find(to, bit, bit_index - 1) : nullptr ;
+                auto &to = nxt[bit >> bit_index & 1] ;
+                return to ? to->find(bit, bit_index - 1) : nullptr ;
             }
         }
 
-        int count(BinaryTrie* t, T bit){
-            auto f = find(t, bit, MAX_BIT) ;
+        int count_(T bit){
+            auto f = find(bit, MAX_BIT) ;
             return f ? f->exist : 0 ;
         }
 
@@ -147,8 +146,8 @@ struct BinaryTrie {
         void push(const T &bit, int id) { push(bit, MAX_BIT, id) ; }
         void push(const T &bit) { push(bit, MAX_BIT, exist) ; }
         void erase(const T &bit) { erase(bit, MAX_BIT) ; }
-        BinaryTrie* find(const T &bit) { return find(root, bit, MAX_BIT) ; }
-        int count(const T &bit) { return count(root, bit) ; }
+        BinaryTrie* find(const T &bit) { return find(bit, MAX_BIT) ; }
+        int count(const T &bit) { return count_(bit) ; }
         pair<T, BinaryTrie *> max_element() { return max_element(MAX_BIT) ; }
         pair<T, BinaryTrie *> min_element() { return min_element(MAX_BIT) ; }
         pair<T, BinaryTrie *> kth_element(int64_t k) { return kth_element(k, MAX_BIT) ; }
@@ -168,25 +167,31 @@ struct BinaryTrie {
             if(count(bit) == 0) push(bit, MAX_BIT, exist) ;
             else push(bit, MAX_BIT, exist, true) ;
         }
+        void erase_for_mex(const T &bit) {
+            if(count(bit) > 1) erase(bit, MAX_BIT, true) ;
+            else erase(bit, MAX_BIT) ;
+        }
 };
 
 int main(){
     BinaryTrie<int,31> V ;
-    cout << V.get_mex() << endl ;
-    cout << V.count(3) << endl ;
-    // int q ;
-    // cin >> q ;
-    // rep(i,q){
-    //     int t , x ;
-    //     cin >> t >> x ;
-    //     if(t == 0){
-            
-    //     }
-    //     if(t == 1){
-
-    //     }
-    //     if(t == 1){
-
-    //     }
-    // }
+    int q ;
+    cin >> q ;
+    rep(i,q){
+        int t , x ;
+        cin >> t >> x ;
+        if(t == 0){
+            if(V.count(x) > 0) continue;
+            V.push(x) ;
+        }
+        if(t == 1){
+            if(V.count(x) == 0) continue;
+            V.erase(x) ;
+        }
+        if(t == 2){
+            V.xor_push(x) ;
+            cout << V.get_min() << endl ;
+            V.xor_push(x) ;
+        }
+    }
 }

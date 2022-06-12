@@ -173,6 +173,28 @@ struct BinaryTrie {
         }
 };
 
+// function                 : return                : description
+// -----------------------------------------------------------------
+// constructor()            :                       : 
+// push(T s, int v)         : void                  : id が v の値 s を入れる
+// push(T s)                : void                  : 値 s を入れる
+// erase(T s)               : void                  : 値 s を消去する
+// push_for_mex(T s)        : void                  : 重複を込みして値 s を入れる
+// push_for_mex(T s, int v) : void                  : 重複を込みして id が v の値 s を入れる
+// erase_for_mex(T s)       : void                  : 重複を込みして値 s を消去する
+// find(T s)                : BinaryTrie *          : 値 s の末端ノードのイテレータを返す
+// count(T s)               : int                   : 値 s 個数を返す
+// max_element()            : pair<T, BinaryTrie*>  : 最大値と最大値の末端ノードのイテレータを返す
+// min_element()            : pair<T, BinaryTrie*>  : 最小値と最小値の末端ノードのイテレータを返す
+// kth_element(int64_t s)   : pair<T, BinaryTrie*>  : k番目の値とk番目の値の末端ノードのイテレータを返す
+// get_max()                : T                     : 最大値を返す
+// get_min()                : T                     : 最小値を返す
+// get_kth(int64_t s)       : T                     : k番目の値を返す
+// get_mex()                : T                     : mexを返す
+// count_less(T s)          : int64_t               : s より小さい値の個数を返す
+// xor_push(T s)            : int64_t               : 全ての値に対して s と xor を行う
+// ------------------------------------------------------------------
+
 int main(){
     BinaryTrie<int,31> V ;
     int q ;

@@ -66,7 +66,7 @@ struct FFT{
         return A ;
     }
     // 高速フーリエ変換（FFT）
-    inline vector<complex<ld>>  fft(vector<complex<ld>> A) { return sub_fft(A,false)  ; }
+    inline vector<complex<ld>> fft(vector<complex<ld>> A) { return sub_fft(A,false) ; }
     // 逆高速フーリエ変換（IFFT）
     inline vector<complex<ld>> ifft(vector<complex<ld>> A) { return sub_fft(A,true) ; }
     // 畳み込み（Comvolution）を行う

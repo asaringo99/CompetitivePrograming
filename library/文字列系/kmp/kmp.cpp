@@ -65,6 +65,10 @@ template<typename T> struct KMP {
 // build()                               : void        : ビルドする
 // first_index_matchng()                 : vector<int> : str 内において pattern 列と一致している箇所の最初のインデックス番号を返す
 // ------------------------------------------------------------------
+// * 注意 *
+// 文字列検索の場合, string型 から vector<char>型 に変更してコンストラクタに入れるようにする.
+// また, 以下(line 80)のように T = char とする
+
 
 // 例題 S := abcabcabcabcabcabc , P = abc => ans := 6
 

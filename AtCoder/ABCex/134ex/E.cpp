@@ -1,25 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
+typedef long double ld ;
+typedef pair<ll,ll> P ;
+typedef tuple<ll,ll,ll> TP ;
+#define chmin(a,b) a = min(a,b)
+#define chmax(a,b) a = max(a,b)
+#define bit_count(x) __builtin_popcountll(x)
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) a / gcd(a,b) * b
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
+#define rrep(i,a,b) for(int i = a ; i < b ; i++)
+#define endl "\n"
 
 int n ;
+multiset<int> st ;
 
 int main(){
+    fast_input_output
     cin >> n ;
-    int A[n] ;
-    rep(i,n) cin >> A[i] ;
-    int dp[n] ;
-    memset(dp,-1,sizeof(dp)) ;
-    for(int i = 0 ; i < n ; i++){
-        auto it = lower_bound(dp,dp+n,A[i]) ;
-        it-- ;
-        int index = it - dp ;
-        dp[index] = A[i] ;
+    rep(i,n){
+        int a ;
+        cin >> a ;
+        if(st.empty()) st.insert(a) ;
+        else{
+            auto it = st.lower_bound(a) ;
+            if(it == st.begin()) st.insert(a) ;
+            else{
+                it-- ;
+                st.erase(it) ;
+                st.insert(a) ;
+            }
+        }
     }
-    int res = n ;
-    for(int i = 0 ; i < n ; i++){
-        if(dp[i] == -1) res-- ;
-    }
-    cout << res << endl ;
+    cout << st.size() << endl ;
 }

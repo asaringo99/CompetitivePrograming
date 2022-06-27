@@ -1,89 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std ;
+#define fast_input_output ios::sync_with_stdio(false); cin.tie(nullptr);
 typedef long long ll ;
+typedef long double ld ;
+typedef pair<ll,ll> P ;
+typedef tuple<ll,ll,ll> TP ;
+#define chmin(a,b) a = min(a,b)
+#define chmax(a,b) a = max(a,b)
+#define bit_count(x) __builtin_popcountll(x)
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) a / gcd(a,b) * b
 #define rep(i,n) for(int i = 0 ; i < n ; i++)
+#define rrep(i,a,b) for(int i = a ; i < b ; i++)
+#define endl "\n"
 
-const int MAX_N = 100007 ;
 const int mod = 1000000007 ;
 
-ll pes[MAX_N+1] ; // (n!)^(p-2) (mod p) を格納
-ll tes[MAX_N+1] ; // (n!) (mod p) を格納
-
-// 逆元(1/n)のmod計算
-ll invmodcal(ll A , ll N){
-    ll res = 1 ;
-    while(N > 0){
-        if(N & 1) res = (res * A) % mod ;
-        A = (A * A) % mod ;
-        N >>= 1 ;
-    }
-    return res % mod ;
-}
-
-// 階乗の逆元(n!)^(-1)のmodを配列に格納
-void invmod(){
-    pes[0] = 1 ; pes[1] = 1 ;
-    for(ll i = 2 ; i <= MAX_N ; i++){
-        pes[i] = invmodcal(i,mod-2) * pes[i-1] % mod ;
-    }
-}
-
-// 階乗のmodを配列に格納
-void powmod(){
-    tes[0] = 1 ; tes[1] = 1 ;
-    for(ll i = 2 ; i <= MAX_N ; i++){
-        tes[i] = (tes[i-1] * i) % mod ;
-    }
-}
-
-ll permutation(ll a , ll b){
-    return (tes[a] * pes[a - b]) % mod ;
-}
-
 ll n , k ;
-vector<int> G[MAX_N] ;
-bool d[MAX_N] ;
+ll dp[101010] ;
+ll res ;
 
-ll bfs(){
-    invmod() ;
-    powmod() ;
-    memset(d,0,sizeof(d)) ;
-    d[0] = true ;
-    queue<int> que ;
-    que.push(0) ;
-    ll val = k ;
-    bool ok = true ;
-    while(!que.empty()){
-        int v = que.front() ; que.pop() ;
-        d[v] = true ;
-        if(ok) {
-            if(k - 1 < G[v].size()) return 0 ;
-            (val *= permutation(k - 1 , G[v].size())) %= mod ;
-            ok = false ;
-        }
-        else{
-            if(k - 2 < G[v].size() - 1) return 0 ;
-            (val *= permutation(k - 2 , G[v].size() - 1)) %= mod ;
-        }
-        for(int i = 0 ; i < G[v].size() ; i++){
-            int u = G[v][i] ;
-            if(!d[u]){
-                que.push(u) ;
-            }
-        }
+vector<int> G[101010] ;
+
+void dfs(int v , int prev){
+    ll c = k ;
+    if(v == 0) res *= c-- ;
+    else c -= 2 ;
+    res %= mod ;
+    for(int u : G[v]){
+        if(u == prev) continue;
+        dfs(u,v) ;
+        res *= c-- ;
+        res %= mod ;
     }
-    return val ;
 }
 
 int main(){
+    fast_input_output
     cin >> n >> k ;
-    for(int i = 0 ; i < n - 1 ; i++){
-        int a , b ;
-        cin >> a >> b ;
-        a-- ;
-        b-- ;
-        G[a].push_back(b) ;
-        G[b].push_back(a) ;
+    rep(i,n-1){
+        int u , v ;
+        cin >> u >> v ;
+        u-- ; v-- ;
+        G[u].push_back(v) ;
+        G[v].push_back(u) ;
     }
-    cout << bfs() << endl ;
+    res = 1 ;
+    dfs(0,-1) ;
+    cout << res << endl ;
 }

@@ -28,6 +28,8 @@
         "string_view": "cpp",
         "ranges": "cpp",
         "utility": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "chrono": "cpp",
+        "complex": "cpp"
     }
 }

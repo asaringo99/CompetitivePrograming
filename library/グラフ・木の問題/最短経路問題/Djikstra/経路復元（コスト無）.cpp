@@ -13,14 +13,9 @@ typedef tuple<ll,ll,ll> TP ;
 #define rrep(i,a,b) for(int i = a ; i < b ; i++)
 #define endl "\n"
 
-struct edge{
-    int to ;
-    ll cost ;
-};
-
 int n , m ;
 
-vector<edge> G[202020] ;
+vector<int> G[202020] ;
 ll d[202020] ;
 int prevv[202020] ; // 一個前のノード
 vector<int> line ; // 経路復元
@@ -37,11 +32,11 @@ void djikstra(int s , int t){
         int v = p.second ;
         if(d[v] < p.first) continue;
         for(int i = 0 ; i < G[v].size() ; i++){
-            edge e = G[v][i] ;
-            if(d[e.to] > d[v] + e.cost){
-                d[e.to] = d[v] + e.cost ;
-                prevv[e.to] = v ;
-                que.push(P(d[e.to],e.to)) ;
+            int u = G[v][i] ;
+            if(d[u] > d[v] + 1){
+                d[u] = d[v] + 1 ;
+                prevv[u] = v ;
+                que.push(P(d[u],u)) ;
             }
         }
     }
@@ -59,10 +54,9 @@ int main(){
     cin >> n >> m ;
     rep(i,m){
         int v , u ;
-        ll c ;
-        cin >> v >> u >> c ;
+        cin >> v >> u ;
         v-- ; u-- ;
-        G[v].push_back(edge{u,c}) ;
-        G[u].push_back(edge{v,c}) ;
+        G[v].push_back(u) ;
+        G[u].push_back(v) ;
     }
 }

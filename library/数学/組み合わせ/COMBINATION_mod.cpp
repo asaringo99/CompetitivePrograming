@@ -37,10 +37,12 @@ void g(){
 
 //nCrの計算
 ll combination(ll n , ll r){
+    if(n < r || r < 0) return 0 ;
     return fac[n] * inv[n-r] % mod * inv[r] % mod ;
 }
 
 ll permutation(ll n , ll r){
+    if(n < r || r < 0) return 0 ;
     return fac[n] * inv[n-r] % mod ;
 }
 

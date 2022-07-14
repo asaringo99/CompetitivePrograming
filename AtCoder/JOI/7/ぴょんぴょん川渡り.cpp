@@ -15,37 +15,41 @@ typedef tuple<ll,ll,ll,ll> TP ;
 
 int n , m ;
 ll d[202][20][101] ;
-vector<P> vec[202] ;
+
+vector<P> G[202] ;
+ll C[202][20] ;
 
 void djikstra(){
-    rep(i,n+2) rep(j,vec[i].size()) rep(k,m+1) d[i][j][k] = 1e16 ;
-    d[0][0][0] = 0 ;
+    rep(i,n) rep(j,20) rep(k,101)  d[i][j][k] = 1e16 ;
     priority_queue<TP,vector<TP>,greater<TP>> que ;
-    que.push({0,0,0,0}) ;
+    rep(i,G[0].size()) {
+        d[0][i][0] = 0 ;
+        que.push({0,0,i,0}) ;
+    }
+    if(m > 0) rep(i,G[1].size()) {
+        d[1][i][1] = 0 ;
+        que.push({0,1,i,1}) ;
+    }
     while(!que.empty()){
-        ll dist , x , y , c ;
-        tie(dist,x,y,c) = que.top() ; que.pop() ;
-        // cout << dist << " " << x << " " << vec[x][y].first << " " << c << endl ;
-        if(dist > d[x][y][c]) continue ;
-        if(x == n + 1) continue ;
-        ll nx = x + 1 , now = vec[x][y].second ; ;
-        for(int i = 0 ; i < vec[nx].size() ; i++){
-            ll ny = vec[nx][i].first , pre = vec[nx][i].second , py = vec[x][y].first ;
-            // if(nx == 3) cout << "djljkl : " << ny << " " << py << " " << pre << " " << now << endl ;
-            if(x == 0 || nx == n + 1) py = ny ;
-            if(d[nx][i][c] > d[x][y][c] + (pre + now) * abs(ny - py)){
-                d[nx][i][c] = d[x][y][c] + (pre + now) * abs(ny - py) ;
-                que.push({d[nx][i][c],nx,i,c}) ;
+        auto [dist,row,col,cnt] = que.top() ; que.pop() ;
+        if(d[row][col][cnt] < dist) continue;
+        auto [v,slip] = G[row][col] ;
+        ll x = C[row][col] ;
+        for(int i = 0 ; i < G[row+1].size() ; i++){
+            auto [nv,s] = G[row+1][i] ;
+            ll nx = C[row+1][i] ;
+            if(d[row+1][nv][cnt] > d[row][col][cnt] + (slip + s) * abs(nx - x)){
+                d[row+1][nv][cnt] = d[row][col][cnt] + (slip + s) * abs(nx - x) ;
+                que.push({d[row+1][nv][cnt],row+1,nv,cnt}) ;
             }
         }
-        if(x == n || c == m) continue ;
-        nx++ ;
-        for(int i = 0 ; i < vec[nx].size() ; i++){
-            ll ny = vec[nx][i].first , pre = vec[nx][i].second , py = vec[x][y].first ;
-            if(x == 0 || nx == n + 1) py = ny ;
-            if(d[nx][i][c+1] > d[x][y][c] + (pre + now) * abs(ny - py)){
-                d[nx][i][c+1] = d[x][y][c] + (pre + now) * abs(ny - py) ;
-                que.push({d[nx][i][c+1],nx,i,c+1}) ;
+        if(cnt >= m) continue;
+        for(int i = 0 ; i < G[row+2].size() ; i++){
+            auto [nv,s] = G[row+2][i] ;
+            ll nx = C[row+2][i] ;
+            if(d[row+2][nv][cnt+1] > d[row][col][cnt] + (slip + s) * abs(nx - x)){
+                d[row+2][nv][cnt+1] = d[row][col][cnt] + (slip + s) * abs(nx - x) ;
+                que.push({d[row+2][nv][cnt+1],row+2,nv,cnt+1}) ;
             }
         }
     }
@@ -53,20 +57,19 @@ void djikstra(){
 
 int main(){
     cin >> n >> m ;
-    vec[0].push_back(P(0,0)) ;
     rep(i,n){
-        int k ;
-        cin >> k ;
-        rep(j,k){
-            int a , x ;
-            cin >> a >> x ;
-            a-- ;
-            vec[i+1].push_back(P(a,x)) ;
+        int c ;
+        cin >> c;
+        rep(j,c){
+            int x , y ;
+            cin >> x >> y ;
+            G[i].push_back(P(j,y)) ;
+            C[i][j] = x ;
         }
     }
-    vec[n+1].push_back(P(0,0)) ;
     djikstra() ;
     ll res = 1e16 ;
-    rep(i,m+1) chmin(res,d[n+1][0][i]) ;
+    rep(i,20) rep(j,m+1) chmin(res,d[n-1][i][j]) ;
+    rep(i,20) rep(j,m) chmin(res,d[n-2][i][j]) ;
     cout << res << endl ;
 }

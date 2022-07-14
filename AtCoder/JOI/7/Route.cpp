@@ -19,9 +19,18 @@ struct edge{
 };
 
 int n , m ;
-ll d[101][101] ;
-P X[101] ;
+int X[101] , Y[101] ;
 vector<edge> G[101] ;
+
+ll d[101][101] ;
+
+bool dot(int v , int from , int to){
+    if(from == -1) return true ;
+    ll x = X[to] - X[v] , y = Y[to] - Y[v] ;
+    ll s = X[from] - X[v] , t = Y[from] - Y[v] ;
+    if(x*s+y*t>0) return false ;
+    else return true ;
+}
 
 void djikstra(){
     rep(i,n) rep(j,n) d[i][j] = 1e16 ;
@@ -29,17 +38,12 @@ void djikstra(){
     priority_queue<TP,vector<TP>,greater<TP>> que ;
     que.push({0,0,0}) ;
     while(!que.empty()){
-        int v , pre , dist ;
-        tie(dist,v,pre) = que.top() ; que.pop() ;
-        if(d[v][pre] < dist) continue;
+        auto [dist,v,from] = que.top() ; que.pop() ;
+        if(d[v][from] < dist) continue;
         for(int i = 0 ; i < G[v].size() ; i++){
             edge e = G[v][i] ;
-            int nx = X[e.to].first , ny = X[e.to].second ;
-            int px = X[pre].first , py = X[pre].second ;
-            int x = X[v].first , y = X[v].second ;
-            int dot = (px - x) * (x - nx) + (py - y) * (y - ny) ;
-            if(d[e.to][v] > d[v][pre] + e.cost && dot >= 0){
-                d[e.to][v] = d[v][pre] + e.cost ;
+            if(d[e.to][v] > d[v][from] + e.cost && dot(v,from,e.to)){
+                d[e.to][v] = d[v][from] + e.cost ;
                 que.push({d[e.to][v],e.to,v}) ;
             }
         }
@@ -48,13 +52,13 @@ void djikstra(){
 
 int main(){
     cin >> n >> m ;
-    rep(i,n) cin >> X[i].first >> X[i].second ;
+    rep(i,n) cin >> X[i] >> Y[i] ;
     rep(i,m){
-        int x , y , z ;
-        cin >> x >> y >> z ;
-        x-- ; y-- ;
-        G[x].push_back(edge{y,z}) ;
-        G[y].push_back(edge{x,z}) ;
+        int a , b , c ;
+        cin >> a >> b >> c ;
+        a-- ; b-- ;
+        G[a].push_back(edge{b,c}) ;
+        G[b].push_back(edge{a,c}) ;
     }
     djikstra() ;
     ll res = 1e16 ;

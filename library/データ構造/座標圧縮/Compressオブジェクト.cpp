@@ -12,29 +12,41 @@ typedef tuple<int,int,int> TP ;
 #define endl "\n"
 
 // 座標圧縮
-struct Compress{
+template<typename T=int> struct Compress{
     vector<int> vec ; // 元の値の座標圧縮後の値
-    unordered_map<ll,ll> mp ; // 元の値がどの値に変換されたか
-    Compress(vector<int> A){
+    unordered_map<T,int> mp ; // 元の値 -> 変換された値
+    unordered_map<int,T> np ; // 変換された値 -> 元の値
+    Compress(vector<T> A){
         int n = A.size() ;
-        vector<int> B(n) ;
+        vector<T> B(n) ;
         for(int i = 0 ; i < n ; i++) B[i] = A[i] ;
         vec.resize(n) ;
         sort(A.begin(),A.end()) ;
         for(int i = 0 ; i < n ; i++){
             auto it = lower_bound(A.begin(),A.end(),B[i]) ;
-            vec[i] = it - A.begin() ;
-            mp[B[i]] = it - A.begin();
+            int id = it - A.begin() ;
+            vec[i] = id ;
+            mp[B[i]] = id;
+            np[id] = B[i] ;
         }
     }
     size_t size() {return vec.size() ; }
-    inline int at(ll i) { return mp[i] ; }
+    // 元の値 -> 変換された値
+    inline int encrypt(T i) { return mp[i] ; }
+    // 変換された値 -> 元の値
+    inline T decrypt(int i) { return np[i] ; }
     inline int operator [] (int i) { return vec[i] ; }
 };
 
+// function         : return              : description
+// -----------------------------------------------------
+// Compress(vector<ll> A) : void  : コンストラクタ, 座圧する
+// encrypt(ll v)          : int   : 元の値 -> 座圧後の値
+// decrypt(int v)         : ll    : 座圧後の値 -> 元の値
+// operator[i]            : int   : 座圧後の値の vector にアクセスすることが可能
 
 int main(){
-    vector<int> B = {3,4,5,6,3456,3215,392348,41,34,3143} ;
-    Compress sit(B) ;
+    vector<ll> B = {3,4,5,6,3456,3215,392348,41,34,3143} ;
+    Compress<ll> sit(B) ;
     rep(i,10) cout << sit[i] << " " ; cout << endl ;
 }

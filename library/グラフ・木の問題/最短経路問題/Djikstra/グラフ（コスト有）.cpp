@@ -29,9 +29,8 @@ void djikstra(){
     priority_queue<P,vector<P>,greater<P>> que ;
     que.push(P(0,0)) ;
     while(!que.empty()){
-        P p = que.top() ; que.pop() ;
-        int v = p.second ;
-        if(d[v] < p.first) continue;
+        auto[dist,v] =  que.top() ; que.pop() ;
+        if(d[v] < dist) continue;
         for(int i = 0 ; i < G[v].size() ; i++){
             edge e = G[v][i] ;
             if(d[e.to] > d[v] + e.cost){
